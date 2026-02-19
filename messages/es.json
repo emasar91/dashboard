@@ -1,0 +1,17 @@
+{
+  "sidebar": {
+    "openSidebar": "Abrir Sidebar",
+    "user": "Usuario Admin",
+    "nameApp": "Dashboard",
+    "dashboard": "Tablero",
+    "products": "Productos",
+    "orders": "Pedidos",
+    "costumers": "Clientes",
+    "discounts": "Descuentos",
+    "categories": "Categorias",
+    "languageSwitcher": {
+      "es": "Español",
+      "en": "Inglés"
+    }
+  }
+}
