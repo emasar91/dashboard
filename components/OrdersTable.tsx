@@ -1,105 +1,96 @@
-const orders = [
-  {
-    id: "#ORD-7821",
-    customer: "Sarah Johnson",
-    product: "Premium Headphones",
-    amount: "$299.00",
-    status: "Delivered",
-  },
-  {
-    id: "#ORD-7820",
-    customer: "Mike Chen",
-    product: "Wireless Keyboard",
-    amount: "$149.00",
-    status: "Shipped",
-  },
-  {
-    id: "#ORD-7819",
-    customer: "Emily Davis",
-    product: "USB-C Hub Pro",
-    amount: "$89.00",
-    status: "Processing",
-  },
-  {
-    id: "#ORD-7818",
-    customer: "James Wilson",
-    product: "Ergonomic Mouse",
-    amount: "$59.00",
-    status: "Delivered",
-  },
-  {
-    id: "#ORD-7817",
-    customer: "Anna Lee",
-    product: "Monitor Stand",
-    amount: "$45.00",
-    status: "Cancelled",
-  },
-]
+"use client"
+
+import { useQuery } from "@tanstack/react-query"
+import { getDashboardData } from "@/services/dashboard"
+import { formatCurrency } from "@/lib/formatCurrency"
+import { useLocale, useTranslations } from "next-intl"
+
+const statusOptions = ["Delivered", "Shipped", "Processing", "Cancelled"]
 
 const statusStyles: Record<string, string> = {
-  Delivered: "bg-accent/10 text-accent",
-  Shipped: "bg-primary/10 text-primary",
-  Processing: "bg-chart-3/20 text-chart-3",
-  Cancelled: "bg-destructive/10 text-destructive",
+  Delivered: "bg-emerald-500/10 text-emerald-500",
+  Shipped: "bg-blue-500/10 text-blue-500",
+  Processing: "bg-amber-500/10 text-amber-500",
+  Cancelled: "bg-rose-500/10 text-rose-500",
 }
 
 export function OrdersTable() {
+  const locale = useLocale()
+  const { data: dashboardData } = useQuery({
+    queryKey: ["dashboard-data"],
+    queryFn: getDashboardData,
+  })
+
+  const t = useTranslations("ordersTable")
+  const orders = dashboardData?.carts || []
+
   return (
     <div className="flex h-full flex-col rounded-xl border border-border bg-card p-4 lg:p-5">
       <div className="mb-4">
         <h3 className="text-sm font-semibold text-card-foreground">
-          Recent Orders
+          {t("title")}
         </h3>
-        <p className="text-xs text-muted-foreground">Latest transactions</p>
+        <p className="text-xs text-muted-foreground">{t("subtitle")}</p>
       </div>
+
       <div className="flex-1 overflow-auto -mx-4 lg:-mx-5">
-        <table className="w-full min-w-[400px]">
+        <table className="w-full min-w-[450px]">
           <thead>
-            <tr className="border-b border-border">
-              <th className="px-4 lg:px-5 pb-2 text-left text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-                Order
+            <tr className="border-b border-border text-left">
+              <th className="px-2  pb-2 text-[10px] font-medium uppercase text-muted-foreground">
+                {t("orderId")}
               </th>
-              <th className="hidden sm:table-cell pb-2 text-left text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-                Customer
+              <th className="pb-2 text-[10px] font-medium uppercase text-muted-foreground">
+                {t("customer")}
               </th>
-              <th className="pb-2 text-left text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-                Product
+              <th className="pb-2 text-[10px] font-medium uppercase text-muted-foreground">
+                {t("product")}
               </th>
-              <th className="pb-2 text-right text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-                Amount
+              <th className="pb-2 text-right text-[10px] font-medium uppercase text-muted-foreground">
+                {t("amount")}
               </th>
-              <th className="px-4 lg:px-5 pb-2 text-right text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-                Status
+              <th className="px-3 pb-2 text-right text-[10px] font-medium uppercase text-muted-foreground">
+                {t("status.title")}
               </th>
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
-              <tr
-                key={order.id}
-                className="border-b border-border/50 transition-colors last:border-0 hover:bg-secondary/30"
-              >
-                <td className="px-4 lg:px-5 py-2.5 text-xs font-mono font-medium text-card-foreground">
-                  {order.id}
-                </td>
-                <td className="hidden sm:table-cell py-2.5 text-xs text-muted-foreground">
-                  {order.customer}
-                </td>
-                <td className="py-2.5 text-xs text-muted-foreground">
-                  {order.product}
-                </td>
-                <td className="py-2.5 text-right text-xs font-medium text-card-foreground">
-                  {order.amount}
-                </td>
-                <td className="px-4 lg:px-5 py-2.5 text-right">
-                  <span
-                    className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium ${statusStyles[order.status]}`}
-                  >
-                    {order.status}
-                  </span>
-                </td>
-              </tr>
-            ))}
+            {orders.slice(0, 10).map((cart) => {
+              // Simulamos un status basado en el ID para que sea consistente
+              const status = statusOptions[cart.id % statusOptions.length]
+
+              return (
+                <tr
+                  key={cart.id}
+                  className="border-b border-border/50 transition-colors last:border-0 hover:bg-secondary/30"
+                >
+                  <td className="px-2  py-2.5 text-xs font-mono font-medium text-card-foreground">
+                    #{cart.id}
+                  </td>
+                  <td className="py-2.5 text-xs text-muted-foreground">
+                    {cart.customerName}
+                  </td>
+                  <td className="py-2.5 text-xs text-muted-foreground truncate max-w-[150px]">
+                    {cart.products[0]?.title}
+                    {cart.products.length > 1 && (
+                      <span className="text-[9px] ml-1">
+                        (+{cart.products.length - 1})
+                      </span>
+                    )}
+                  </td>
+                  <td className="py-2.5 text-right text-xs font-medium text-card-foreground">
+                    {formatCurrency(cart.total, locale)}
+                  </td>
+                  <td className="px-2 py-2.5 text-right">
+                    <span
+                      className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium ${statusStyles[status]}`}
+                    >
+                      {t(`status.${status.toLowerCase()}`)}
+                    </span>
+                  </td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>

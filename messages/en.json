@@ -53,5 +53,31 @@
   "categoryCard": {
     "title": "Top Categories",
     "subtitle": "Revenue distribution"
+  },
+  "ordersTable": {
+    "title": "Recent Orders",
+    "subtitle": "Latest orders placed",
+    "orderId": "ID",
+    "customer": "Customer",
+    "product": "Product",
+    "amount": "Amount",
+    "status": {
+      "title": "Status",
+      "shipped": "Shipped",
+      "processing": "Processing",
+      "cancelled": "Cancelled",
+      "delivered": "Delivered"
+    }
+  },
+  "discountsCard": {
+    "title": "Active Discounts",
+    "subtitle": "Currently running",
+    "product": "Product",
+    "discount": "Discount",
+    "used": "Uses"
+  },
+  "activityCard": {
+    "title": "Recent Activity",
+    "subtitle": "Latest updates"
   }
 }

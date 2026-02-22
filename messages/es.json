@@ -53,5 +53,31 @@
   "categoryCard": {
     "title": "Categorías más vendidas",
     "subtitle": "Distribución de ingresos"
+  },
+  "ordersTable": {
+    "title": "Pedidos Recientes",
+    "subtitle": "Últimos pedidos realizados",
+    "orderId": "ID",
+    "customer": "Cliente",
+    "product": "Producto",
+    "amount": "Monto",
+    "status": {
+      "title": "Estado",
+      "shipped": "Enviado",
+      "processing": "Procesando",
+      "cancelled": "Cancelado",
+      "delivered": "Entregado"
+    }
+  },
+  "discountsCard": {
+    "title": "Descuentos activos",
+    "subtitle": "Actualmente en ejecución",
+    "product": "Producto",
+    "discount": "Descuento",
+    "used": "Usos"
+  },
+  "activityCard": {
+    "title": "Actividad Reciente",
+    "subtitle": "Últimas actualizaciones"
   }
 }

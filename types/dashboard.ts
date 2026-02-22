@@ -6,6 +6,7 @@ export interface Cart {
   userId: number
   totalProducts: number
   totalQuantity: number
+  customerName: string
 }
 
 export interface CartProduct {

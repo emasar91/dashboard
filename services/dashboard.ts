@@ -12,14 +12,17 @@ export async function getDashboardData(): Promise<DashboardData> {
   const [cartsRes, usersRes, discountProductsRes, allProductsRes] =
     await Promise.all([
       api.get<CartsResponse>("/carts"),
-      api.get<UsersResponse>("/users?limit=1"),
-      // Productos para la tarjeta de descuentos
+      api.get<UsersResponse>("/users?limit=0&select=id,firstName,lastName"),
       api.get<ProductsResponse>(
         "/products?limit=10&sortBy=discountPercentage&order=desc",
       ),
-      // Todos los productos para tener el mapeo de ID -> Categoría
       api.get<ProductsResponse>("/products?limit=0"),
     ])
+
+  const userLookup: Record<number, string> = {}
+  usersRes.data.users.forEach((u) => {
+    userLookup[u.id] = `${u.firstName} ${u.lastName}`
+  })
 
   const carts = cartsRes.data.carts
   const allProducts = allProductsRes.data.products
@@ -32,14 +35,13 @@ export async function getDashboardData(): Promise<DashboardData> {
   })
 
   // 2. Inyectamos la categoría en los productos de los carritos
-  const cartsWithCategories = carts.map((cart) => ({
+  const cartsWithData = cartsRes.data.carts.map((cart) => ({
     ...cart,
-    products: cart.products.map((prod) => {
-      return {
-        ...prod,
-        category: categoryLookup[prod.id] || "Other", // Si no la encuentra, ponemos "Other"
-      }
-    }),
+    customerName: userLookup[cart.userId] || `User #${cart.userId}`,
+    products: cart.products.map((prod) => ({
+      ...prod,
+      category: categoryLookup[prod.id] || "Other",
+    })),
   }))
 
   return {
@@ -49,7 +51,7 @@ export async function getDashboardData(): Promise<DashboardData> {
       totalOrders: cartsRes.data.total,
       avgValue: totalSales / cartsRes.data.total,
     },
-    carts: cartsWithCategories,
+    carts: cartsWithData,
     discounts: discountProductsRes.data.products,
   }
 }
