@@ -213,6 +213,5 @@ export const getRecentActivity = (
     })
   })
 
-  console.log("🚀 ~ activities:", activities)
   return activities.sort((a, b) => a.time.localeCompare(b.time)) // Un sort simple
 }

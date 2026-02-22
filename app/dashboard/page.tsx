@@ -19,7 +19,6 @@ export default async function Home() {
   })
 
   const data = await getDashboardData()
-  console.log("🚀 ~ data:", data)
 
   return (
     <div className="max-w-7xl space-y-3 md:space-y-4 mx-auto">
