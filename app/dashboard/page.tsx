@@ -70,7 +70,7 @@ export default async function Home() {
         </div>
 
         <div className="min-h-[280px] lg:col-span-3">
-          <TopSelling />
+          <TopSelling carts={data.carts} />
         </div>
 
         <div className="min-h-[240px] lg:col-span-2">

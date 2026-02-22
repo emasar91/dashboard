@@ -40,5 +40,10 @@
     },
     "revenue": "Ingresos",
     "orders": "Pedidos"
+  },
+  "topSelling": {
+    "title": "Productos más vendidos",
+    "subtitle": "Por unidades vendidas",
+    "each": "c/u"
   }
 }

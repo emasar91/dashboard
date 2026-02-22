@@ -1,4 +1,6 @@
+import { formatCurrency } from "@/lib/formatCurrency"
 import { type LucideIcon } from "lucide-react"
+import { getLocale } from "next-intl/server"
 
 interface StatCardProps {
   title: string
@@ -10,7 +12,7 @@ interface StatCardProps {
   since: string
 }
 
-export function StatCard({
+export async function StatCard({
   title,
   value,
   change,
@@ -19,12 +21,7 @@ export function StatCard({
   type,
   since,
 }: StatCardProps) {
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(value)
-  }
+  const locale = await getLocale()
 
   return (
     <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 lg:p-3 transition-all duration-200 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
@@ -34,7 +31,7 @@ export function StatCard({
             {title}
           </p>
           <p className="text-2xl font-bold tracking-tight text-card-foreground lg:text-3xl">
-            {type === "currency" ? formatCurrency(value) : value}
+            {type === "currency" ? formatCurrency(value, locale) : value}
           </p>
         </div>
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary lg:h-10 lg:w-10">

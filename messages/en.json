@@ -40,5 +40,10 @@
     },
     "revenue": "Revenue",
     "orders": "Orders"
+  },
+  "topSelling": {
+    "title": "Top Selling Products",
+    "subtitle": "By units sold",
+    "each": "each"
   }
 }

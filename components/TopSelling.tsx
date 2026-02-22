@@ -1,26 +1,25 @@
-const products = [
-  {
-    name: "Premium Headphones",
-    sales: 1245,
-    revenue: "$62,250",
-    trend: "+12%",
-  },
-  { name: "Wireless Keyboard", sales: 986, revenue: "$39,440", trend: "+8%" },
-  { name: "USB-C Hub Pro", sales: 879, revenue: "$35,160", trend: "+18%" },
-  { name: "Ergonomic Mouse", sales: 742, revenue: "$22,260", trend: "+5%" },
-  { name: "Monitor Stand", sales: 631, revenue: "$18,930", trend: "-2%" },
-]
+import { formatCurrency } from "@/lib/formatCurrency"
+import { getTopSellingProducts } from "@/services/dashboard"
+import { Cart } from "@/types/dashboard"
+import { getLocale, getTranslations } from "next-intl/server"
 
-export function TopSelling() {
+interface TopSellingProps {
+  carts: Cart[]
+}
+
+export async function TopSelling({ carts }: TopSellingProps) {
+  const products = getTopSellingProducts(carts)
   const maxSales = Math.max(...products.map((p) => p.sales))
+  const t = await getTranslations("topSelling")
+  const locale = await getLocale()
 
   return (
     <div className="flex h-full flex-col rounded-xl border border-border bg-card p-4 lg:p-5">
       <div className="mb-4">
         <h3 className="text-sm font-semibold text-card-foreground">
-          Top Selling Products
+          {t("title")}
         </h3>
-        <p className="text-xs text-muted-foreground">By units sold</p>
+        <p className="text-xs text-muted-foreground">{t("subtitle")}</p>
       </div>
       <div className="flex-1 space-y-3 overflow-auto">
         {products.map((product, i) => (
@@ -31,7 +30,11 @@ export function TopSelling() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
                 <p className="truncate text-xs font-medium text-card-foreground">
-                  {product.name}
+                  <span>{product.name} - </span>
+                  <span>
+                    {t("each")}{" "}
+                    {formatCurrency(Number(product.revenue.slice(1)), locale)}
+                  </span>
                 </p>
                 <span
                   className={`ml-2 text-[10px] font-semibold ${
