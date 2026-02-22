@@ -13,5 +13,32 @@
       "es": "Spanish",
       "en": "English"
     }
+  },
+  "dashboard": {
+    "totalSales": "Total Sales",
+    "totalUsers": "Total Users",
+    "totalOrders": "Total Orders",
+    "avgValue": "Avg. Value",
+    "since": "Since last month"
+  },
+  "revenueChart": {
+    "title": "Revenue Overview",
+    "subtitle": "Monthly revenue & orders",
+    "month": {
+      "jan": "Jan",
+      "feb": "Feb",
+      "mar": "Mar",
+      "apr": "Apr",
+      "may": "May",
+      "jun": "Jun",
+      "jul": "Jul",
+      "aug": "Aug",
+      "sep": "Sep",
+      "oct": "Oct",
+      "nov": "Nov",
+      "dec": "Dec"
+    },
+    "revenue": "Revenue",
+    "orders": "Orders"
   }
 }

@@ -7,11 +7,15 @@ function Layout({ children }: { children: React.ReactNode }) {
     <div className="flex h-dvh overflow-hidden bg-background">
       <Sidebar />
 
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <main className="flex-1 flex overflow-y-auto justify-center h-dvh bg-[url('/assets/images/pattern.svg'),_linear-gradient(309deg,_rgba(209,214,141,1)_0%,_rgba(143,187,141,1)_45%,_rgba(143,187,141,1)_56%,_rgba(209,214,141,1)_100%)] bg-size-[450px,cover] bg-position-[repeat,no-repeat] bg-[local,fixed]">
-          {children}
-        </main>
-      </div>
+      <main className="w-full min-h-screen bg-background p-3 md:p-4 lg:p-6 ml-15 sm:ml-0">
+        <div className="mb-4 mx-auto w-full max-w-7xl">
+          <h1 className="text-xl font-bold text-card-foreground">Dashboard</h1>
+          <p className="text-sm text-muted-foreground">
+            Overview of your business
+          </p>
+        </div>
+        {children}
+      </main>
     </div>
   )
 }

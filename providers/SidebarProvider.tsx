@@ -1,21 +1,35 @@
 "use client"
 
-import { createContext, useContext, useState, useMemo, ReactNode } from "react"
+import {
+  createContext,
+  useContext,
+  useState,
+  useMemo,
+  ReactNode,
+  useEffect,
+} from "react"
 
-// 1. Definir el tipo para el contexto
 interface SidebarContextType {
   openSidebar: boolean
   setOpenSidebar: (open: boolean) => void
 }
 
-// 2. Crear el contexto con un valor inicial por defecto
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined)
 
-// 3. Crear el Provider
-export const SidebarProvider = ({ children }: { children: ReactNode }) => {
-  const [openSidebar, setOpenSidebar] = useState(true)
+export const SidebarProvider = ({
+  children,
+  initialState,
+}: {
+  children: ReactNode
+  initialState: boolean
+}) => {
+  const [openSidebar, setOpenSidebar] = useState(initialState)
 
-  // Memoize context value to prevent unnecessary re-renders
+  // Sincronizamos el estado con la cookie cada vez que cambie
+  useEffect(() => {
+    document.cookie = `sidebar_state=${openSidebar}; path=/; max-age=${60 * 60 * 24 * 30}` // 30 días
+  }, [openSidebar])
+
   const value = useMemo(() => ({ openSidebar, setOpenSidebar }), [openSidebar])
 
   return (
@@ -23,7 +37,6 @@ export const SidebarProvider = ({ children }: { children: ReactNode }) => {
   )
 }
 
-// 4. Hook personalizado para usar el contexto fácilmente
 export const useSidebar = () => {
   const context = useContext(SidebarContext)
   if (context === undefined) {

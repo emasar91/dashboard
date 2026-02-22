@@ -13,5 +13,32 @@
       "es": "Español",
       "en": "Inglés"
     }
+  },
+  "dashboard": {
+    "totalSales": "Ventas Totales",
+    "totalUsers": "Usuarios Totales",
+    "totalOrders": "Pedidos Totales",
+    "avgValue": "Valor Promedio",
+    "since": "Desde el último mes"
+  },
+  "revenueChart": {
+    "title": "Resumen de ingresos",
+    "subtitle": "Ingresos & Pedidos Mensuales",
+    "month": {
+      "jan": "Ene",
+      "feb": "Feb",
+      "mar": "Mar",
+      "apr": "Abr",
+      "may": "May",
+      "jun": "Jun",
+      "jul": "Jul",
+      "aug": "Ago",
+      "sep": "Sep",
+      "oct": "Oct",
+      "nov": "Nov",
+      "dec": "Dec"
+    },
+    "revenue": "Ingresos",
+    "orders": "Pedidos"
   }
 }

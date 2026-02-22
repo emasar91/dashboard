@@ -77,7 +77,7 @@ export function Sidebar() {
           "sm:relative sm:z-0",
           openSidebar
             ? "w-[350px] translate-x-0" // Abierto: ancho completo
-            : "w-[58px] translate-x-0", // Cerrado: solo espacio para iconos
+            : "w-[64px]! translate-x-0", // Cerrado: solo espacio para iconos
         )}
       >
         {/* Contenido interno con ancho FIJO para que NO se deforme al cerrar */}
@@ -99,11 +99,12 @@ export function Sidebar() {
               >
                 {t("nameApp")}
               </span>
+
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="p-0! cursor-pointer"
+                    className="p-0! cursor-pointer dark:hover:bg-transparent hover:bg-transparent hover:text-primary"
                     onClick={() => setOpenSidebar(!openSidebar)}
                   >
                     {openSidebar ? (
@@ -122,6 +123,8 @@ export function Sidebar() {
             </div>
           </div>
 
+          <Separator className="shrink-0" />
+
           <div className="flex h-[72px] shrink-0 p-2 flex-1">
             <div className="flex gap-6 w-full flex-col items-start">
               {items.map((item) => (
@@ -133,7 +136,12 @@ export function Sidebar() {
                   <TooltipTrigger asChild>
                     <Link
                       href={item.href}
-                      className="flex gap-4 dark:hover:bg-slate-700 hover:bg-gray-200 w-full rounded-lg p-2 transition-opacity duration-300 items-center"
+                      className={cn(
+                        "flex gap-4 dark:hover:bg-slate-700 hover:bg-gray-200 w-full rounded-lg p-2 transition-opacity duration-300 items-center hover:text-primary",
+                        openSidebar
+                          ? ""
+                          : "hover:bg-transparent dark:hover:bg-transparent",
+                      )}
                     >
                       {/* Contenedor para asegurar que el icono no se deforme */}
                       <div className="shrink-0">{item.icon}</div>
@@ -169,8 +177,8 @@ export function Sidebar() {
           >
             <div
               className={cn(
-                "flex items-center gap-2 justify-end w-full",
-                !openSidebar && "flex-col justify-center",
+                "flex items-start gap-2 w-full",
+                !openSidebar && "flex-col items-center justify-start",
               )}
             >
               <LanguageSwitcher />
@@ -180,7 +188,7 @@ export function Sidebar() {
 
           <Separator className="shrink-0" />
 
-          <div className="flex h-[72px] shrink-0 items-center gap-2 p-2 mb-16">
+          <div className="flex h-[72px] shrink-0 items-center gap-2 p-2">
             <div className="flex items-center gap-2 border rounded-full p-2 border-primary">
               <User />
             </div>
