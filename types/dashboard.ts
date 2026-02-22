@@ -71,5 +71,14 @@ export interface DashboardData {
     avgValue: number
   }
   carts: Cart[]
+  users: User[]
   discounts: Product[]
+}
+
+export interface Activity {
+  icon: string
+  iconBg: string
+  iconColor: string
+  text: string
+  time: string
 }

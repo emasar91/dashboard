@@ -5,9 +5,9 @@ import { getCategoryData, getDashboardData } from "@/services/dashboard"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts"
-import { Spinner } from "./ui/spinner"
 import { useLocale, useTranslations } from "next-intl"
 import { formatCurrency } from "@/lib/formatCurrency"
+import LoadingData from "./LoadingData"
 
 interface PieTooltipEntry {
   name: string
@@ -68,12 +68,7 @@ export function CategoryCard() {
 
   const total = categories.reduce((sum, d) => sum + d.value, 0)
 
-  if (isLoading)
-    return (
-      <div className="flex h-full items-center justify-center">
-        <Spinner className="size-12 text-primary" />
-      </div>
-    )
+  if (isLoading) return <LoadingData title={t("loading")} />
 
   return (
     <div className="flex h-full flex-col rounded-xl border border-border bg-card p-4 lg:p-5">

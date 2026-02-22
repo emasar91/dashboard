@@ -6,6 +6,8 @@ import {
   ProductsResponse,
   DashboardData,
   CartProduct,
+  User,
+  Activity,
 } from "@/types/dashboard"
 
 export async function getDashboardData(): Promise<DashboardData> {
@@ -52,13 +54,14 @@ export async function getDashboardData(): Promise<DashboardData> {
       avgValue: totalSales / cartsRes.data.total,
     },
     carts: cartsWithData,
+    users: usersRes.data.users,
     discounts: discountProductsRes.data.products,
   }
 }
 
 export const transformCartData = (
   carts: Cart[],
-  t: (key: string) => string,
+  t: (key: string, values?: Record<string, string | number>) => string,
 ) => {
   const months = [
     t("month.jan"),
@@ -160,4 +163,56 @@ export const getCategoryData = (carts: Cart[]) => {
     .map(([name, value]) => ({ name, value }))
     .sort((a, b) => b.value - a.value)
     .slice(0, 5)
+}
+
+export const getRecentActivity = (
+  carts: Cart[],
+  users: User[],
+  t: (key: string, values?: Record<string, string | number>) => string,
+) => {
+  const activities: Activity[] = []
+
+  // 1. Agregamos actividades de "Pagos Recibidos" usando los carritos
+  carts.slice(0, 3).forEach((cart, i) => {
+    activities.push({
+      icon: "CreditCard",
+      text: t("paymentReceived", {
+        name: cart.customerName,
+        amount: `$${cart.total}`,
+      }),
+      time: `${i * 15 + 2} min ago`,
+      iconBg: "bg-emerald-500/10",
+      iconColor: "text-emerald-500",
+    })
+  })
+
+  // 2. Agregamos "Nuevos Usuarios" usando la lista de usuarios
+  users.slice(5, 7).forEach((user, i) => {
+    activities.push({
+      icon: "UserPlus",
+      text: t("newCustomer", {
+        name: `${user.firstName} ${user.lastName}`,
+      }),
+      time: `${(i + 1) * 45} min ago`,
+      iconBg: "bg-blue-500/10",
+      iconColor: "text-blue-500",
+    })
+  })
+
+  // 3. Agregamos "Pedidos Enviados"
+  carts.slice(3, 5).forEach((cart, i) => {
+    activities.push({
+      icon: "Package",
+      text: t("orderShipped", {
+        name: cart.customerName,
+        amount: `$${cart.total}`,
+      }),
+      time: `${i + 2} hr ago`,
+      iconBg: "bg-amber-500/10",
+      iconColor: "text-amber-500",
+    })
+  })
+
+  console.log("🚀 ~ activities:", activities)
+  return activities.sort((a, b) => a.time.localeCompare(b.time)) // Un sort simple
 }

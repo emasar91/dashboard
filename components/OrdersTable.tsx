@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import { getDashboardData } from "@/services/dashboard"
 import { formatCurrency } from "@/lib/formatCurrency"
 import { useLocale, useTranslations } from "next-intl"
+import LoadingData from "./LoadingData"
 
 const statusOptions = ["Delivered", "Shipped", "Processing", "Cancelled"]
 
@@ -16,13 +17,17 @@ const statusStyles: Record<string, string> = {
 
 export function OrdersTable() {
   const locale = useLocale()
-  const { data: dashboardData } = useQuery({
+  const { data: dashboardData, isLoading } = useQuery({
     queryKey: ["dashboard-data"],
     queryFn: getDashboardData,
   })
 
   const t = useTranslations("ordersTable")
   const orders = dashboardData?.carts || []
+
+  if (isLoading) {
+    return <LoadingData title={t("loading")} />
+  }
 
   return (
     <div className="flex h-full flex-col rounded-xl border border-border bg-card p-4 lg:p-5">

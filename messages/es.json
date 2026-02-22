@@ -28,6 +28,7 @@
   "revenueChart": {
     "title": "Resumen de ingresos",
     "subtitle": "Ingresos & Pedidos Mensuales",
+    "loading": "Cargando ingresos...",
     "month": {
       "jan": "Ene",
       "feb": "Feb",
@@ -52,11 +53,13 @@
   },
   "categoryCard": {
     "title": "Categorías más vendidas",
-    "subtitle": "Distribución de ingresos"
+    "subtitle": "Distribución de ingresos",
+    "loading": "Cargando categorías..."
   },
   "ordersTable": {
     "title": "Pedidos Recientes",
     "subtitle": "Últimos pedidos realizados",
+    "loading": "Cargando pedidos...",
     "orderId": "ID",
     "customer": "Cliente",
     "product": "Producto",
@@ -70,14 +73,24 @@
     }
   },
   "discountsCard": {
-    "title": "Descuentos activos",
-    "subtitle": "Actualmente en ejecución",
-    "product": "Producto",
-    "discount": "Descuento",
-    "used": "Usos"
+    "title": "Las mejores ofertas",
+    "subtitle": "Los mayores descuentos disponibles",
+    "loading": "Cargando ofertas...",
+    "stock": "Stock"
   },
   "activityCard": {
     "title": "Actividad Reciente",
-    "subtitle": "Últimas actualizaciones"
+    "subtitle": "Últimas actualizaciones",
+    "loading": "Cargando actividad...",
+    "paymentReceived": "Pago recibido de {name} por {amount}",
+    "newOrder": "Nuevo pedido de {name} por {amount}",
+    "newReview": "{name} dejó una reseña de {rating} estrellas",
+    "newCustomer": "Nuevo cliente registrado: {name}",
+    "orderShipped": "Pedido de {name} enviado",
+    "orderDelivered": "Pedido de {name} entregado",
+    "orderCancelled": "Pedido de {name} cancelado",
+    "orderProcessing": "Pedido de {name} en procesamiento",
+    "justNow": "Recién ahora",
+    "minutesAgo": "{count}m"
   }
 }

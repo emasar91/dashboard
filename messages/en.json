@@ -28,6 +28,7 @@
   "revenueChart": {
     "title": "Revenue Overview",
     "subtitle": "Monthly revenue & orders",
+    "loading": "Loading revenue...",
     "month": {
       "jan": "Jan",
       "feb": "Feb",
@@ -52,11 +53,13 @@
   },
   "categoryCard": {
     "title": "Top Categories",
-    "subtitle": "Revenue distribution"
+    "subtitle": "Revenue distribution",
+    "loading": "Loading categories..."
   },
   "ordersTable": {
     "title": "Recent Orders",
     "subtitle": "Latest orders placed",
+    "loading": "Loading orders...",
     "orderId": "ID",
     "customer": "Customer",
     "product": "Product",
@@ -70,14 +73,24 @@
     }
   },
   "discountsCard": {
-    "title": "Active Discounts",
-    "subtitle": "Currently running",
-    "product": "Product",
-    "discount": "Discount",
-    "used": "Uses"
+    "title": "Top Deals",
+    "subtitle": "Best discounts available",
+    "loading": "Loading deals...",
+    "stock": "Stock"
   },
   "activityCard": {
     "title": "Recent Activity",
-    "subtitle": "Latest updates"
+    "subtitle": "Latest updates",
+    "loading": "Loading activity...",
+    "paymentReceived": "Payment received from {name} for {amount}",
+    "newOrder": "New order from {name} for {amount}",
+    "newReview": "{name} left a review of {rating} stars",
+    "newCustomer": "New customer registered: {name}",
+    "orderShipped": "Order from {name} shipped",
+    "orderDelivered": "Order from {name} delivered",
+    "orderCancelled": "Order from {name} cancelled",
+    "orderProcessing": "Order from {name} processing",
+    "justNow": "Just now",
+    "minutesAgo": "{count}m"
   }
 }

@@ -14,8 +14,8 @@ import { useThemeColors } from "@/hooks/useThemeColor"
 import { useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { getDashboardData, transformCartData } from "@/services/dashboard"
-import { Spinner } from "./ui/spinner"
 import { useTranslations } from "next-intl"
+import LoadingData from "./LoadingData"
 
 interface TooltipEntry {
   value: number
@@ -74,7 +74,7 @@ export function ChartOverTime() {
   if (isLoading)
     return (
       <div className="flex h-full items-center justify-center">
-        <Spinner className="size-12 text-primary" />
+        <LoadingData title={t("loading")} className="w-full" />
       </div>
     )
 
