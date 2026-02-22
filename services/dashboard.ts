@@ -9,16 +9,38 @@ import {
 } from "@/types/dashboard"
 
 export async function getDashboardData(): Promise<DashboardData> {
-  const [cartsRes, usersRes, productsRes] = await Promise.all([
-    api.get<CartsResponse>("/carts"),
-    api.get<UsersResponse>("/users?limit=1"),
-    api.get<ProductsResponse>(
-      "/products?limit=10&sortBy=discountPercentage&order=desc",
-    ),
-  ])
+  const [cartsRes, usersRes, discountProductsRes, allProductsRes] =
+    await Promise.all([
+      api.get<CartsResponse>("/carts"),
+      api.get<UsersResponse>("/users?limit=1"),
+      // Productos para la tarjeta de descuentos
+      api.get<ProductsResponse>(
+        "/products?limit=10&sortBy=discountPercentage&order=desc",
+      ),
+      // Todos los productos para tener el mapeo de ID -> Categoría
+      api.get<ProductsResponse>("/products?limit=0"),
+    ])
 
   const carts = cartsRes.data.carts
+  const allProducts = allProductsRes.data.products
   const totalSales = carts.reduce((acc: number, c: Cart) => acc + c.total, 0)
+
+  // 1. Creamos un mapa de ID -> Categoría para una búsqueda ultra rápida (O(1))
+  const categoryLookup: Record<number, string> = {}
+  allProducts.forEach((p) => {
+    categoryLookup[p.id] = p.category
+  })
+
+  // 2. Inyectamos la categoría en los productos de los carritos
+  const cartsWithCategories = carts.map((cart) => ({
+    ...cart,
+    products: cart.products.map((prod) => {
+      return {
+        ...prod,
+        category: categoryLookup[prod.id] || "Other", // Si no la encuentra, ponemos "Other"
+      }
+    }),
+  }))
 
   return {
     stats: {
@@ -27,8 +49,8 @@ export async function getDashboardData(): Promise<DashboardData> {
       totalOrders: cartsRes.data.total,
       avgValue: totalSales / cartsRes.data.total,
     },
-    carts, // Para el gráfico y la tabla
-    discounts: productsRes.data.products, // Para DiscountsCard
+    carts: cartsWithCategories,
+    discounts: discountProductsRes.data.products,
   }
 }
 
@@ -120,4 +142,20 @@ export const getTopSellingProducts = (carts: Cart[]) => {
           ? `+${(p.sales % 15) + 2}%`
           : `-${(p.sales % 5) + 1}%`,
     }))
+}
+
+export const getCategoryData = (carts: Cart[]) => {
+  const categoryMap: Record<string, number> = {}
+
+  carts.forEach((cart) => {
+    cart.products.forEach((product: CartProduct) => {
+      const cat = product.category // Ahora sí existe
+      categoryMap[cat] = (categoryMap[cat] || 0) + product.total
+    })
+  })
+
+  return Object.entries(categoryMap)
+    .map(([name, value]) => ({ name, value }))
+    .sort((a, b) => b.value - a.value)
+    .slice(0, 5)
 }

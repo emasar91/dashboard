@@ -17,6 +17,7 @@ export interface CartProduct {
   discountPercentage: number
   discountedPrice: number
   thumbnail: string
+  category: string
 }
 
 export interface CartsResponse {

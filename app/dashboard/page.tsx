@@ -8,7 +8,6 @@ import { TopSelling } from "@/components/TopSelling"
 import { DollarSign, ShoppingBag, TrendingUp, Users } from "lucide-react"
 import { QueryClient } from "@tanstack/react-query"
 import { getDashboardData } from "@/services/dashboard"
-import { getTranslations } from "next-intl/server"
 
 export default async function Home() {
   const queryClient = new QueryClient()
@@ -21,46 +20,45 @@ export default async function Home() {
 
   const data = await getDashboardData()
   console.log("🚀 ~ data:", data)
-  const t = await getTranslations("dashboard")
 
   return (
     <div className="max-w-7xl space-y-3 md:space-y-4 mx-auto">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 md:gap-4 ">
         <StatCard
-          title={t("totalSales")}
+          title="totalSales"
           value={data.stats.totalSales}
           change="+14.2%"
           changeType="positive"
           icon={DollarSign}
           type="currency"
-          since={t("since")}
+          since="since"
         />
         <StatCard
-          title={t("totalUsers")}
+          title="totalUsers"
           value={data.stats.totalUsers}
           change="+7.8%"
           changeType="positive"
           icon={Users}
           type="number"
-          since={t("since")}
+          since="since"
         />
         <StatCard
-          title={t("totalOrders")}
+          title="totalOrders"
           value={data.stats.totalOrders}
           change="+22.1%"
           changeType="positive"
           icon={ShoppingBag}
           type="number"
-          since={t("since")}
+          since="since"
         />
         <StatCard
-          title={t("avgValue")}
+          title="avgValue"
           value={data.stats.avgValue}
           change="-3.1%"
           changeType="negative"
           icon={TrendingUp}
           type="currency"
-          since={t("since")}
+          since="since"
         />
       </div>
 
@@ -74,7 +72,7 @@ export default async function Home() {
         </div>
 
         <div className="min-h-[240px] lg:col-span-2">
-          <DiscountsCard />
+          <CategoryCard />
         </div>
       </div>
 
@@ -83,7 +81,7 @@ export default async function Home() {
           <OrdersTable />
         </div>
         <div className="min-h-[280px] lg:col-span-3">
-          <CategoryCard />
+          <DiscountsCard />
         </div>
         <div className="min-h-[280px] lg:col-span-2">
           <ActivityCard />

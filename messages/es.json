@@ -15,6 +15,10 @@
     }
   },
   "dashboard": {
+    "title": "Tablero",
+    "subtitle": "Resumen de tu negocio"
+  },
+  "stats": {
     "totalSales": "Ventas Totales",
     "totalUsers": "Usuarios Totales",
     "totalOrders": "Pedidos Totales",
@@ -45,5 +49,9 @@
     "title": "Productos más vendidos",
     "subtitle": "Por unidades vendidas",
     "each": "c/u"
+  },
+  "categoryCard": {
+    "title": "Categorías más vendidas",
+    "subtitle": "Distribución de ingresos"
   }
 }

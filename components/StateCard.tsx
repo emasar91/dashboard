@@ -1,6 +1,6 @@
 import { formatCurrency } from "@/lib/formatCurrency"
 import { type LucideIcon } from "lucide-react"
-import { getLocale } from "next-intl/server"
+import { getLocale, getTranslations } from "next-intl/server"
 
 interface StatCardProps {
   title: string
@@ -22,13 +22,14 @@ export async function StatCard({
   since,
 }: StatCardProps) {
   const locale = await getLocale()
+  const t = await getTranslations("stats")
 
   return (
     <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 lg:p-3 transition-all duration-200 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            {title}
+            {t(title)}
           </p>
           <p className="text-2xl font-bold tracking-tight text-card-foreground lg:text-3xl">
             {type === "currency" ? formatCurrency(value, locale) : value}
@@ -48,7 +49,7 @@ export async function StatCard({
         >
           {change}
         </span>
-        <span className="text-xs text-muted-foreground">{since}</span>
+        <span className="text-xs text-muted-foreground">{t(since)}</span>
       </div>
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-linear-to-r from-transparent via-primary/40 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
     </div>

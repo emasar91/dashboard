@@ -15,6 +15,10 @@
     }
   },
   "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Overview of your business"
+  },
+  "stats": {
     "totalSales": "Total Sales",
     "totalUsers": "Total Users",
     "totalOrders": "Total Orders",
@@ -45,5 +49,9 @@
     "title": "Top Selling Products",
     "subtitle": "By units sold",
     "each": "each"
+  },
+  "categoryCard": {
+    "title": "Top Categories",
+    "subtitle": "Revenue distribution"
   }
 }
