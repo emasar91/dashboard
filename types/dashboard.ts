@@ -54,6 +54,8 @@ export interface Product {
   category: string
   thumbnail: string
   images: string[]
+  sku: string
+  availabilityStatus: string
 }
 
 export interface ProductsResponse {
@@ -73,6 +75,9 @@ export interface DashboardData {
   carts: Cart[]
   users: User[]
   discounts: Product[]
+  allProducts: Product[]
+  allCategories: string[]
+  lowStockProducts: Product[]
 }
 
 export interface Activity {

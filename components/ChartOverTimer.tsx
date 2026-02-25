@@ -13,7 +13,7 @@ import {
 import { useThemeColors } from "@/hooks/useThemeColor"
 import { useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { getDashboardData, transformCartData } from "@/services/dashboard"
+import { getDashboardData, transformCartData } from "@/services/dashboardData"
 import { useTranslations } from "next-intl"
 import LoadingData from "./LoadingData"
 

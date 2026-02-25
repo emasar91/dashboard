@@ -92,5 +92,41 @@
     "orderProcessing": "Pedido de {name} en procesamiento",
     "justNow": "Recién ahora",
     "minutesAgo": "{count}m"
+  },
+  "products": {
+    "title": "Productos",
+    "subtitle": "Lista de productos",
+    "searchPlaceholder": "Por nombre o SKU",
+    "searchTitle": "Buscar productos",
+    "emptyMessage": "No hay productos.",
+    "table": {
+      "image": "Imagen",
+      "name": "Nombre",
+      "description": "Descripción",
+      "sku": "SKU",
+      "category": "Categoria",
+      "price": "Precio",
+      "discount": "Descuento",
+      "stock": "Stock",
+      "rating": "Calificación"
+    }
+  },
+  "statsProducts": {
+    "totalProducts": "Productos Totales",
+    "totalCategories": "Categorias Totales",
+    "lowStock": "Stock Bajo",
+    "since": "Desde el último mes"
+  },
+  "pagination": {
+    "rowsPerPage": "Filas por página",
+    "page": "Página",
+    "of": "de",
+    "next": "Siguiente",
+    "prev": "Anterior"
+  },
+  "filter": {
+    "title": "Filtrar",
+    "placeholder": "Por categoría",
+    "all": "Todas"
   }
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import { useThemeColors } from "@/hooks/useThemeColor"
-import { getCategoryData, getDashboardData } from "@/services/dashboard"
+import { getCategoryData, getDashboardData } from "@/services/dashboardData"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts"

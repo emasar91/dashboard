@@ -7,7 +7,7 @@ import { StatCard } from "@/components/StateCard"
 import { TopSelling } from "@/components/TopSelling"
 import { DollarSign, ShoppingBag, TrendingUp, Users } from "lucide-react"
 import { QueryClient } from "@tanstack/react-query"
-import { getDashboardData } from "@/services/dashboard"
+import { getDashboardData } from "@/services/dashboardData"
 
 export default async function Home() {
   const queryClient = new QueryClient()
@@ -31,6 +31,8 @@ export default async function Home() {
           icon={DollarSign}
           type="currency"
           since="since"
+          trend="up"
+          intl="stats"
         />
         <StatCard
           title="totalUsers"
@@ -40,6 +42,8 @@ export default async function Home() {
           icon={Users}
           type="number"
           since="since"
+          trend="up"
+          intl="stats"
         />
         <StatCard
           title="totalOrders"
@@ -49,6 +53,8 @@ export default async function Home() {
           icon={ShoppingBag}
           type="number"
           since="since"
+          trend="up"
+          intl="stats"
         />
         <StatCard
           title="avgValue"
@@ -58,6 +64,8 @@ export default async function Home() {
           icon={TrendingUp}
           type="currency"
           since="since"
+          trend="down"
+          intl="stats"
         />
       </div>
 

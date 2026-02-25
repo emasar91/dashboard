@@ -92,5 +92,41 @@
     "orderProcessing": "Order from {name} processing",
     "justNow": "Just now",
     "minutesAgo": "{count}m"
+  },
+  "products": {
+    "title": "Products",
+    "subtitle": "List of products",
+    "searchPlaceholder": "By name or SKU",
+    "searchTitle": "Search products",
+    "emptyMessage": "No products found.",
+    "table": {
+      "image": "Image",
+      "name": "Name",
+      "description": "Description",
+      "sku": "SKU",
+      "category": "Category",
+      "price": "Price",
+      "discount": "Discount",
+      "stock": "Stock",
+      "rating": "Rating"
+    }
+  },
+  "statsProducts": {
+    "totalProducts": "Total Products",
+    "totalCategories": "Total Categories",
+    "lowStock": "Low Stock",
+    "since": "Since last month"
+  },
+  "pagination": {
+    "rowsPerPage": "Rows per page",
+    "page": "Page",
+    "of": "of",
+    "next": "Next",
+    "prev": "Previous"
+  },
+  "filter": {
+    "title": "Filter",
+    "placeholder": "By category",
+    "all": "All"
   }
 }

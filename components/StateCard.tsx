@@ -1,5 +1,5 @@
 import { formatCurrency } from "@/lib/formatCurrency"
-import { type LucideIcon } from "lucide-react"
+import { TrendingDown, TrendingUp, type LucideIcon } from "lucide-react"
 import { getLocale, getTranslations } from "next-intl/server"
 
 interface StatCardProps {
@@ -10,6 +10,8 @@ interface StatCardProps {
   icon: LucideIcon
   type: "currency" | "number"
   since: string
+  trend: "up" | "down"
+  intl: string
 }
 
 export async function StatCard({
@@ -20,9 +22,11 @@ export async function StatCard({
   icon: Icon,
   type,
   since,
+  trend,
+  intl,
 }: StatCardProps) {
   const locale = await getLocale()
-  const t = await getTranslations("stats")
+  const t = await getTranslations(intl)
 
   return (
     <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 lg:p-3 transition-all duration-200 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
@@ -41,12 +45,17 @@ export async function StatCard({
       </div>
       <div className="mt-3 flex items-center gap-1.5">
         <span
-          className={`inline-flex items-center rounded-md px-1.5 py-0.5 text-xs font-semibold ${
+          className={`inline-flex items-center rounded-md px-1.5 py-0.5 text-xs font-semibold gap-1 ${
             changeType === "positive"
               ? "bg-accent/10 text-accent"
               : "bg-destructive/10 text-destructive"
           }`}
         >
+          {trend === "up" ? (
+            <TrendingUp className="size-4" />
+          ) : (
+            <TrendingDown className="size-4" />
+          )}
           {change}
         </span>
         <span className="text-xs text-muted-foreground">{t(since)}</span>

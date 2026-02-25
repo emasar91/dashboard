@@ -1,5 +1,5 @@
 import { formatCurrency } from "@/lib/formatCurrency"
-import { getTopSellingProducts } from "@/services/dashboard"
+import { getTopSellingProducts } from "@/services/dashboardData"
 import { Cart } from "@/types/dashboard"
 import { getLocale, getTranslations } from "next-intl/server"
 

@@ -21,7 +21,7 @@ import ThemeSwitcher from "./ThemeSwitcher"
 import Link from "next/link"
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
 
-export function Sidebar() {
+export function Sidebar({ currentSelected }: { currentSelected: string }) {
   const t = useTranslations("sidebar")
   const { openSidebar, setOpenSidebar } = useSidebar()
 
@@ -137,14 +137,27 @@ export function Sidebar() {
                     <Link
                       href={item.href}
                       className={cn(
-                        "flex gap-4 dark:hover:bg-slate-700 hover:bg-gray-200 w-full rounded-lg p-2 transition-opacity duration-300 items-center hover:text-primary",
+                        // Clases base y de hover
+                        "flex gap-4 dark:hover:bg-slate-700 hover:bg-gray-200 w-full rounded-lg p-2 transition-all duration-300 items-center hover:text-primary",
+                        // Lógica de sidebar abierto/cerrado
                         openSidebar
                           ? ""
                           : "hover:bg-transparent dark:hover:bg-transparent",
+                        // Lógica de elemento SELECCIONADO (Azul y Hover forzado)
+                        currentSelected === item.title &&
+                          "text-primary bg-gray-200 dark:bg-slate-700 dark:text-primary",
                       )}
                     >
                       {/* Contenedor para asegurar que el icono no se deforme */}
-                      <div className="shrink-0">{item.icon}</div>
+                      <div
+                        className={cn(
+                          "shrink-0",
+                          currentSelected === item.title &&
+                            "text-primary dark:text-primary",
+                        )}
+                      >
+                        {item.icon}
+                      </div>
 
                       <span
                         className={cn(
@@ -152,6 +165,9 @@ export function Sidebar() {
                           openSidebar
                             ? "opacity-100 w-full"
                             : "opacity-0 w-0 pointer-events-none",
+                          // Color azul dinámico para el texto
+                          currentSelected === item.title &&
+                            "text-primary dark:text-primary font-medium",
                         )}
                       >
                         {t(item.title)}

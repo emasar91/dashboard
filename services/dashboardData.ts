@@ -56,6 +56,9 @@ export async function getDashboardData(): Promise<DashboardData> {
     carts: cartsWithData,
     users: usersRes.data.users,
     discounts: discountProductsRes.data.products,
+    allProducts,
+    allCategories: [...new Set(Object.values(categoryLookup))],
+    lowStockProducts: allProducts.filter((p) => p.stock < 10),
   }
 }
 

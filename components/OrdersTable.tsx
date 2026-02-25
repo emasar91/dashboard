@@ -1,7 +1,7 @@
 "use client"
 
 import { useQuery } from "@tanstack/react-query"
-import { getDashboardData } from "@/services/dashboard"
+import { getDashboardData } from "@/services/dashboardData"
 import { formatCurrency } from "@/lib/formatCurrency"
 import { useLocale, useTranslations } from "next-intl"
 import LoadingData from "./LoadingData"

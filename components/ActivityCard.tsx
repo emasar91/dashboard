@@ -1,7 +1,7 @@
 "use client"
 
 import { useQuery } from "@tanstack/react-query"
-import { getDashboardData, getRecentActivity } from "@/services/dashboard"
+import { getDashboardData, getRecentActivity } from "@/services/dashboardData"
 import {
   ShoppingCart,
   UserPlus,
