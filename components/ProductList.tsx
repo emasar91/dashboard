@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils"
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
 import { truncateText } from "@/lib/truncateText"
 
-export default function ProductListContainer({
+export default function ProductList({
   categories,
   products,
 }: {
@@ -23,33 +23,85 @@ export default function ProductListContainer({
 }) {
   const t = useTranslations("products")
   const locale = useLocale()
-  const [selectedCategory, setSelectedCategory] = useState("all")
+
+  // 1. Nuevo estado de filtros múltiples
+  const [selectedFilters, setSelectedFilters] = useState<
+    Record<string, string[]>
+  >({
+    category: ["all"],
+  })
   const [searchQuery, setSearchQuery] = useState("")
   const [filteredProducts, setFilteredProducts] = useState(products)
   const [currentPage, setCurrentPage] = useState(1)
 
+  // 2. Definición de grupos para el FilterButton
+  const filterGroups = [
+    {
+      label: t("filter.placeholder"), // Asegúrate de tener esta clave en tu i18n
+      key: "category",
+      options: categories,
+    },
+  ]
+
+  // 3. Manejador de cambio de filtros corregido
+  const handleFilterChange = (key: string, value: string) => {
+    setSelectedFilters((prev) => {
+      const currentGroup = prev[key] || []
+      let newGroup: string[]
+
+      if (value === "all") {
+        newGroup = ["all"]
+      } else {
+        // Quitamos "all" si estaba presente al seleccionar una categoría específica
+        const cleanGroup = currentGroup.filter((v) => v !== "all")
+        newGroup = cleanGroup.includes(value)
+          ? cleanGroup.filter((v) => v !== value) // Toggle off
+          : [...cleanGroup, value] // Toggle on
+
+        // Si el grupo queda vacío, volvemos a "all" por defecto
+        if (newGroup.length === 0) newGroup = ["all"]
+      }
+
+      return { ...prev, [key]: newGroup }
+    })
+    setCurrentPage(1)
+  }
+
+  const handleClearFilters = () => {
+    // Reseteamos al estado inicial (solo "all" en categoría)
+    setSelectedFilters({
+      category: ["all"],
+      // Si tienes género o edad en Clientes, añádelos aquí también:
+      // gender: [],
+      // age: []
+    })
+    setCurrentPage(1)
+  }
+
+  // 4. useEffect de filtrado actualizado
   useEffect(() => {
     const filtered = products.filter((product) => {
-      // 1. Filtro de Categoría:
-      // Si es "all", pasa siempre (true). Si no, comparamos.
+      // Filtro de Categoría (soporta selección múltiple)
+      const selectedCats = selectedFilters.category
       const matchesCategory =
-        selectedCategory === "all" ||
-        product.category.toLowerCase() === selectedCategory.toLowerCase()
+        selectedCats.includes("all") ||
+        selectedCats.some(
+          (cat) => cat.toLowerCase() === product.category.toLowerCase(),
+        )
 
-      // 2. Filtro de Búsqueda (Title o SKU):
-      // Si no hay query, pasa siempre. Si hay, buscamos en ambos campos.
+      // Filtro de Búsqueda
       const query = searchQuery.toLowerCase().trim()
       const matchesQuery =
         query === "" ||
         product.title.toLowerCase().includes(query) ||
         product.sku.toLowerCase().includes(query)
 
-      // Solo si cumple ambos criterios se incluye en el resultado
       return matchesCategory && matchesQuery
     })
+
     //eslint-disable-next-line
     setFilteredProducts(filtered)
-  }, [selectedCategory, searchQuery, products])
+  }, [selectedFilters, searchQuery, products])
 
   const productColumns: Column<Product>[] = [
     {
@@ -196,14 +248,13 @@ export default function ProductListContainer({
             setCurrentPage(1)
           }}
         />
+        {/* Usamos el nuevo FilterButton con soporte para grupos */}
         <FilterButton
-          categories={categories}
-          selectedCategory={selectedCategory}
+          groups={filterGroups}
+          selectedFilters={selectedFilters}
           intlKey="products.filter"
-          onCategoryChange={(category) => {
-            setSelectedCategory(category)
-            setCurrentPage(1)
-          }}
+          onFilterChange={handleFilterChange}
+          onClearFilters={handleClearFilters}
         />
       </div>
       <TableCustom

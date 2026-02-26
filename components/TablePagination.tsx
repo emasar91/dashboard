@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { buttonStyles, itemsSelectStyles } from "@/constant"
 import { useTranslations } from "next-intl"
 
 interface Props {
@@ -44,7 +45,7 @@ export function TablePagination({
         </span>
         <Select value={pageSize.toString()} onValueChange={onPageSizeChange}>
           <SelectTrigger
-            className="w-[70px] h-8 cursor-pointer"
+            className={`w-[70px] h-8 cursor-pointer ${buttonStyles}`}
             id="select-rows-per-page"
           >
             <SelectValue />
@@ -53,28 +54,19 @@ export function TablePagination({
             <SelectGroup>
               <SelectItem
                 value="10"
-                className={`hover:bg-gray-100! text-black! dark:hover:bg-gray-800! dark:text-white! cursor-pointer ${
-                  pageSize === 10 &&
-                  "bg-gray-100! dark:bg-gray-800! text-primary! dark:text-primary!"
-                }`}
+                className={itemsSelectStyles(pageSize === 10)}
               >
                 10
               </SelectItem>
               <SelectItem
                 value="25"
-                className={`hover:bg-gray-100! text-black! dark:hover:bg-gray-800! dark:text-white! cursor-pointer  ${
-                  pageSize === 25 &&
-                  "bg-gray-100! dark:bg-gray-800! text-primary! dark:text-primary!"
-                }`}
+                className={itemsSelectStyles(pageSize === 25)}
               >
                 25
               </SelectItem>
               <SelectItem
                 value="50"
-                className={`hover:bg-gray-100! text-black! dark:hover:bg-gray-800! dark:text-white! cursor-pointer ${
-                  pageSize === 50 &&
-                  "bg-gray-100! dark:bg-gray-800! text-primary! dark:text-primary!"
-                }`}
+                className={itemsSelectStyles(pageSize === 50)}
               >
                 50
               </SelectItem>
@@ -102,7 +94,7 @@ export function TablePagination({
               className={
                 currentPage === 1
                   ? "pointer-events-none opacity-50"
-                  : "cursor-pointer dark:hover:bg-gray-800! dark:hover:text-white! hover:bg-gray-200! hover:text-black!"
+                  : `cursor-pointer ${buttonStyles}`
               }
             />
           </PaginationItem>
@@ -117,7 +109,7 @@ export function TablePagination({
               className={
                 currentPage === totalPages
                   ? "pointer-events-none opacity-50"
-                  : "cursor-pointer dark:hover:bg-gray-800! dark:hover:text-white! hover:bg-gray-200! hover:text-black!"
+                  : `cursor-pointer ${buttonStyles}`
               }
             />
           </PaginationItem>

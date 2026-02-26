@@ -6,7 +6,7 @@
     "dashboard": "Dashboard",
     "products": "Products",
     "orders": "Orders",
-    "costumers": "Customers",
+    "customers": "Customers",
     "discounts": "Discounts",
     "categories": "Categories",
     "languageSwitcher": {
@@ -168,6 +168,66 @@
         "processing": "Processing",
         "cancelled": "Cancelled",
         "delivered": "Delivered"
+      }
+    }
+  },
+  "customers": {
+    "title": "Customers",
+    "subtitle": "Customer list",
+    "searchPlaceholder": "By name, email or Id",
+    "searchTitle": "Search customers",
+    "emptyMessage": "No customers found.",
+    "statsCustomers": {
+      "totalUsers": "Total Users",
+      "usersActive": "Active Users",
+      "newCustomers": "New Customers",
+      "since": "Since last month"
+    },
+    "filter": {
+      "title": "Filter",
+      "gender": "By gender",
+      "ageRange": "By age range",
+      "all": "Clear filters"
+    },
+    "table": {
+      "id": "ID",
+      "customer": "Customer",
+      "contact": "Contact",
+      "info": "Info",
+      "location": "Location",
+      "role": {
+        "title": "Role",
+        "admin": "Admin",
+        "user": "User",
+        "moderator": "Moderator"
+      }
+    },
+    "customerDetail": {
+      "title": "Customer Detail",
+      "subtitle": "Complete customer information",
+      "personalInfo": {
+        "title": "Personal",
+        "age": "Age",
+        "years": "years",
+        "gender": {
+          "title": "Gender",
+          "male": "Male",
+          "female": "Female"
+        },
+        "bloodGroup": "Blood Group",
+        "birthDate": "Birth Date"
+      },
+      "workInfo": {
+        "title": "Work",
+        "university": "University"
+      },
+      "financialInfo": { "title": "Finances", "iban": "IBAN" },
+      "locationInfo": "Location",
+      "deviceInfo": "Device",
+      "role": {
+        "admin": "Admin",
+        "user": "User",
+        "moderator": "Moderator"
       }
     }
   }

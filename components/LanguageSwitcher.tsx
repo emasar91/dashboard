@@ -11,7 +11,7 @@ import {
 } from "./ui/menubar"
 import { useLocale } from "next-intl"
 import { useTranslations } from "next-intl"
-import { Globe, ChevronDown } from "lucide-react"
+import { Globe, ChevronDown, Check } from "lucide-react"
 import { useSidebar } from "@/providers/SidebarProvider"
 import { cn } from "@/lib/utils"
 
@@ -55,6 +55,9 @@ export function LanguageSwitcher() {
               )}
             >
               {lang.label}
+              {locale === lang.id && (
+                <Check className="w-4 h-4 ml-2 text-primary" />
+              )}
             </MenubarItem>
           ))}
         </MenubarContent>

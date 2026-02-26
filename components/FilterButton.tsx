@@ -1,79 +1,98 @@
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { cn } from "@/lib/utils"
+import { buttonStyles, itemsSelectStyles } from "@/constant"
 import { ListFilter } from "lucide-react"
 import { useTranslations } from "next-intl"
 
+// Estructura para manejar múltiples grupos de filtros
+interface FilterGroup {
+  label: string // "Género", "Edad", etc.
+  key: string // "gender", "ageRange"
+  options: string[]
+}
+
 interface FilterButtonProps {
-  categories: string[]
-  selectedCategory: string
-  onCategoryChange: (category: string) => void
+  groups: FilterGroup[]
+  selectedFilters: Record<string, string[]> // Ejemplo: { gender: ['male'], ageRange: ['20-29'] }
+  onFilterChange: (key: string, value: string) => void
+  onClearFilters: () => void // <-- Nueva prop para limpiar
   intlKey: string
 }
 
 export function FilterButton({
-  categories,
-  selectedCategory,
-  onCategoryChange,
+  groups,
+  selectedFilters,
+  onFilterChange,
+  onClearFilters,
   intlKey,
 }: FilterButtonProps) {
   const t = useTranslations(intlKey)
+
+  // Contamos cuántos filtros hay activos para mostrar en el botón
+  // Solo contamos los elementos que NO sean "all"
+  const activeCount = Object.values(selectedFilters)
+    .flat()
+    .filter((value) => value !== "all").length
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className=" bg-gray-50  hover:bg-gray-200 hover:text-primary dark:hover:bg-slate-700 cursor-pointer border"
+          className={`gap-2 cursor-pointer ${buttonStyles}`}
         >
           <ListFilter className="size-4" />
-          {selectedCategory === "all"
-            ? t("title")
-            : selectedCategory.charAt(0).toUpperCase() +
-              selectedCategory.slice(1)}
+          <span>{t("title")}</span>
+          {activeCount > 0 && (
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
+              {activeCount}
+            </span>
+          )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="min-w-4 max-h-[200px] ">
-        <DropdownMenuLabel>{t("placeholder")}</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuRadioGroup
-          value={selectedCategory}
-          onValueChange={onCategoryChange}
-        >
-          <DropdownMenuRadioItem
-            value="all"
-            className={cn(
-              "capitalize",
-              selectedCategory === "all"
-                ? "bg-primary/20 text-primary dark:text-primary dark:bg-primary/20 dark:hover:bg-primary/10 dark:hover:text-primary! hover:bg-primary/20! hover:text-primary!"
-                : "dark:hover:bg-primary/10 dark:hover:text-white! hover:bg-primary/10! hover:text-black!",
-            )}
-          >
-            {t("all")}
-          </DropdownMenuRadioItem>
-          {categories.map((cat) => (
-            <DropdownMenuRadioItem
-              key={cat}
-              value={cat}
-              className={cn(
-                "capitalize",
-                selectedCategory === cat
-                  ? "bg-primary/20 text-primary dark:text-primary dark:bg-primary/20 hover:bg-primary/20! hover:text-primary!"
-                  : "hover:bg-primary/10! hover:text-black! dark:hover:bg-primary/10 dark:hover:text-white!",
-              )}
+
+      <DropdownMenuContent className="w-56 max-h-[400px] overflow-y-auto">
+        {/* Botón para limpiar todo al principio del menú si hay filtros */}
+        {activeCount > 0 && (
+          <>
+            <Button
+              variant="ghost"
+              className="w-full text-center text-xs h-9 text-destructive hover:text-destructive hover:bg-destructive/10 dark:hover:bg-destructive/10 justify-center font-bold cursor-pointer"
+              onClick={onClearFilters}
             >
-              {cat}
-            </DropdownMenuRadioItem>
-          ))}
-        </DropdownMenuRadioGroup>
+              {t("all")}
+            </Button>
+            <DropdownMenuSeparator />
+          </>
+        )}
+
+        {groups.map((group, index) => (
+          <div key={group.key}>
+            <DropdownMenuLabel className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+              {group.label}
+            </DropdownMenuLabel>
+            {group.options.map((option) => (
+              <DropdownMenuCheckboxItem
+                key={option}
+                className={`capitalize cursor-pointer ${itemsSelectStyles(selectedFilters[group.key]?.includes(option))}`}
+                checked={selectedFilters[group.key]?.includes(option)}
+                // Evita que el menú se cierre al clickear
+                onSelect={(e) => e.preventDefault()}
+                onCheckedChange={() => onFilterChange(group.key, option)}
+              >
+                {option.replace("-", " ")}
+              </DropdownMenuCheckboxItem>
+            ))}
+            {index + 1 < groups.length && <DropdownMenuSeparator />}
+          </div>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   )

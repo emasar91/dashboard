@@ -20,7 +20,7 @@ export interface Column<T> {
   width?: string
 }
 
-interface TableCustomProps<T> {
+interface TableCustomProps<T extends { id: string | number }> {
   data: T[]
   columns: Column<T>[]
   initialPageSize?: number
@@ -28,9 +28,10 @@ interface TableCustomProps<T> {
   currentPage?: number
   onPageChange?: (page: number) => void
   pagination?: boolean
+  onRowClick?: (item: T) => void
 }
 
-export function TableCustom<T>({
+export function TableCustom<T extends { id: string | number }>({
   data,
   columns,
   initialPageSize = 10,
@@ -38,6 +39,7 @@ export function TableCustom<T>({
   currentPage = 1,
   onPageChange = () => {},
   pagination = true,
+  onRowClick,
 }: TableCustomProps<T>) {
   const [pageSize, setPageSize] = useState(initialPageSize)
 
@@ -75,7 +77,8 @@ export function TableCustom<T>({
               currentData.map((item, index) => (
                 <TableRow
                   key={index}
-                  className="border-b border-gray-100 dark:bg-[#16181d] dark:border-slate-800 last:border-0 hover:bg-gray-50/50 dark:hover:bg-slate-900/50 transition-colors"
+                  className="border-b border-gray-100 dark:bg-[#16181d] dark:border-slate-800 last:border-0 hover:bg-gray-50/50 dark:hover:bg-slate-900/50 transition-colors cursor-pointer"
+                  onClick={() => onRowClick?.(item)}
                 >
                   {columns.map((column) => (
                     <TableCell

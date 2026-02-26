@@ -42,8 +42,8 @@ export function Sidebar({ currentSelected }: { currentSelected: string }) {
       icon: <Handbag className="size-7 shrink-0" />,
     },
     {
-      title: "costumers",
-      href: "/costumers",
+      title: "customers",
+      href: "/customers",
       icon: <Users className="size-7 shrink-0" />,
     },
     {

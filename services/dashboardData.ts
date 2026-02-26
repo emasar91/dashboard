@@ -15,9 +15,7 @@ export async function getDashboardData(): Promise<DashboardData> {
     await Promise.all([
       api.get<CartsResponse>("/carts"),
       // Pedimos los usuarios necesarios para el cruce de datos
-      api.get<UsersResponse>(
-        "/users?limit=0&select=id,firstName,lastName,image,email",
-      ),
+      api.get<UsersResponse>("/users?limit=0"),
       // Top descuentos para la sección de "Top Deals"
       api.get<ProductsResponse>(
         "/products?limit=10&sortBy=discountPercentage&order=desc",

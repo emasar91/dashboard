@@ -6,7 +6,7 @@
     "dashboard": "Tablero",
     "products": "Productos",
     "orders": "Pedidos",
-    "costumers": "Clientes",
+    "customers": "Clientes",
     "discounts": "Descuentos",
     "categories": "Categorias",
     "languageSwitcher": {
@@ -102,7 +102,7 @@
     "filter": {
       "title": "Filtrar",
       "placeholder": "Por categoría",
-      "all": "Todas"
+      "all": "Borrar filtros"
     },
     "table": {
       "image": "Imagen",
@@ -153,7 +153,7 @@
     "filter": {
       "title": "Filtrar",
       "placeholder": "Por estado",
-      "all": "Todos"
+      "all": "Borra filtros"
     },
     "table": {
       "id": "ID",
@@ -168,6 +168,66 @@
         "processing": "Procesando",
         "cancelled": "Cancelado",
         "delivered": "Entregado"
+      }
+    }
+  },
+  "customers": {
+    "title": "Clientes",
+    "subtitle": "Lista de clientes",
+    "searchPlaceholder": "Por nombre, email o Id",
+    "searchTitle": "Buscar clientes",
+    "emptyMessage": "No hay clientes.",
+    "statsCustomers": {
+      "totalUsers": "Usuarios Totales",
+      "usersActive": "Usuarios Activos",
+      "newCustomers": "Nuevos Clientes",
+      "since": "Desde el último mes"
+    },
+    "filter": {
+      "title": "Filtrar",
+      "gender": "Por género",
+      "ageRange": "Por rango de edad",
+      "all": "Borrar filtros"
+    },
+    "table": {
+      "id": "ID",
+      "customer": "Cliente",
+      "contact": "Contacto",
+      "info": "Información",
+      "location": "Ubicación",
+      "role": {
+        "title": "Rol",
+        "admin": "Admin",
+        "user": "Usuario",
+        "moderator": "Moderador"
+      }
+    },
+    "customerDetail": {
+      "title": "Detalle del Cliente",
+      "subtitle": "Información completa del cliente",
+      "personalInfo": {
+        "title": "Personal",
+        "age": "Edad",
+        "years": "años",
+        "gender": {
+          "title": "Género",
+          "male": "Masculino",
+          "female": "Femenino"
+        },
+        "bloodGroup": "Tipo de Sangre",
+        "birthDate": "Fecha de Nacimiento"
+      },
+      "workInfo": {
+        "title": "Trabajo",
+        "university": "Universidad"
+      },
+      "financialInfo": { "title": "Finanzas", "iban": "IBAN" },
+      "locationInfo": "Ubicación",
+      "deviceInfo": "Dispositivo",
+      "role": {
+        "admin": "Administrador",
+        "user": "Usuario",
+        "moderator": "Moderador"
       }
     }
   }
