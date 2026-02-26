@@ -2,9 +2,9 @@ import ProductList from "@/components/ProductList"
 import { StatCard } from "@/components/StateCard"
 import { getDashboardData } from "@/services/dashboardData"
 import { QueryClient } from "@tanstack/react-query"
-import { Box, Shapes, TriangleAlert } from "lucide-react"
+import { Package, Shapes, TriangleAlert } from "lucide-react"
 
-async function page() {
+async function ProductsPage() {
   const queryClient = new QueryClient()
 
   // Hacemos prefetch para que React Query ya tenga los datos al renderizar
@@ -23,7 +23,7 @@ async function page() {
           value={data.allProducts.length}
           change="+14.2%"
           changeType="positive"
-          icon={Box}
+          icon={Package}
           type="number"
           since="since"
           trend="up"
@@ -62,4 +62,4 @@ async function page() {
   )
 }
 
-export default page
+export default ProductsPage

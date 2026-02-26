@@ -7,6 +7,8 @@ export interface Cart {
   totalProducts: number
   totalQuantity: number
   customerName: string
+  status: string
+  customerEmail: string
 }
 
 export interface CartProduct {
@@ -32,7 +34,8 @@ export interface User {
   id: number
   firstName: string
   lastName: string
-  // Add other fields as needed, though for dashboard we mainly use total
+  image: string
+  email: string
 }
 
 export interface UsersResponse {
@@ -66,18 +69,20 @@ export interface ProductsResponse {
 }
 
 export interface DashboardData {
-  stats: {
-    totalSales: number
-    totalUsers: number
-    totalOrders: number
-    avgValue: number
-  }
+  totalSales: number
+  totalUsers: number
+  totalOrders: number
+  avgCartValue: number
   carts: Cart[]
   users: User[]
   discounts: Product[]
   allProducts: Product[]
   allCategories: string[]
   lowStockProducts: Product[]
+  usersWithOrders: number
+  productsSold: number
+  totalDiscounts: number
+  allStatus: string[]
 }
 
 export interface Activity {

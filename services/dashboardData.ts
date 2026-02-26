@@ -14,51 +14,94 @@ export async function getDashboardData(): Promise<DashboardData> {
   const [cartsRes, usersRes, discountProductsRes, allProductsRes] =
     await Promise.all([
       api.get<CartsResponse>("/carts"),
-      api.get<UsersResponse>("/users?limit=0&select=id,firstName,lastName"),
+      // Pedimos los usuarios necesarios para el cruce de datos
+      api.get<UsersResponse>(
+        "/users?limit=0&select=id,firstName,lastName,image,email",
+      ),
+      // Top descuentos para la sección de "Top Deals"
       api.get<ProductsResponse>(
         "/products?limit=10&sortBy=discountPercentage&order=desc",
       ),
+      // Todos los productos para el lookup de categorías y stock
       api.get<ProductsResponse>("/products?limit=0"),
     ])
 
-  const userLookup: Record<number, string> = {}
+  const allProducts = allProductsRes.data.products
+  const carts = cartsRes.data.carts
+
+  // 1. Creación de Mapas (Lookups) para rendimiento O(1)
+  const userLookup: Record<number, User> = {}
   usersRes.data.users.forEach((u) => {
-    userLookup[u.id] = `${u.firstName} ${u.lastName}`
+    userLookup[u.id] = u
   })
 
-  const carts = cartsRes.data.carts
-  const allProducts = allProductsRes.data.products
-  const totalSales = carts.reduce((acc: number, c: Cart) => acc + c.total, 0)
-
-  // 1. Creamos un mapa de ID -> Categoría para una búsqueda ultra rápida (O(1))
   const categoryLookup: Record<number, string> = {}
   allProducts.forEach((p) => {
     categoryLookup[p.id] = p.category
   })
 
-  // 2. Inyectamos la categoría en los productos de los carritos
-  const cartsWithData = cartsRes.data.carts.map((cart) => ({
+  // 2. Enriquecer los carritos (Cruce de datos Carts + Users + Categories)
+  const cartsWithData = carts.map((cart) => ({
     ...cart,
-    customerName: userLookup[cart.userId] || `User #${cart.userId}`,
+    customerName: userLookup[cart.userId]
+      ? `${userLookup[cart.userId].firstName} ${userLookup[cart.userId].lastName}`
+      : `User #${cart.userId}`,
+    customerImage: userLookup[cart.userId]?.image || "",
+    customerEmail: userLookup[cart.userId]?.email || "",
+    // Inyectamos la categoría a cada producto dentro del carrito
     products: cart.products.map((prod) => ({
       ...prod,
       category: categoryLookup[prod.id] || "Other",
     })),
+    // Asignamos un estado aleatorio pero consistente basado en el ID
+    status: ["Shipped", "Processing", "Cancelled", "Delivered"][cart.id % 4],
   }))
 
+  // 3. Cálculos Financieros Corregidos
+  // Total Sales: El dinero real que entró (valor con descuento)
+  const totalSales = carts.reduce(
+    (acc: number, c: Cart) => acc + c.discountedTotal,
+    0,
+  )
+
+  // Total Gross: Lo que valían los productos originalmente
+  const totalGross = carts.reduce((acc: number, c: Cart) => acc + c.total, 0)
+
+  // Ahorro total (Dinero real de descuentos)
+  const totalDiscountCash = totalGross - totalSales
+
+  const allStatus = Array.from(
+    new Set(
+      cartsWithData.map((cart: Cart) => {
+        return cart.status
+      }),
+    ),
+  )
+
   return {
-    stats: {
-      totalSales,
-      totalUsers: usersRes.data.total,
-      totalOrders: cartsRes.data.total,
-      avgValue: totalSales / cartsRes.data.total,
-    },
+    totalSales,
+    totalUsers: usersRes.data.total,
+    totalOrders: cartsRes.data.total,
+    avgCartValue: totalSales / cartsRes.data.total, // Ticket promedio real
+
     carts: cartsWithData,
+    productsSold: carts.reduce(
+      (acc: number, c: Cart) => acc + c.totalQuantity,
+      0,
+    ),
+    totalDiscounts: totalDiscountCash,
+
+    // Conteo real de clientes únicos con pedidos
+    usersWithOrders: new Set(carts.map((cart) => cart.userId)).size,
+    allStatus,
     users: usersRes.data.users,
     discounts: discountProductsRes.data.products,
     allProducts,
-    allCategories: [...new Set(Object.values(categoryLookup))],
+    allCategories: [...new Set(allProducts.map((p) => p.category))],
     lowStockProducts: allProducts.filter((p) => p.stock < 10),
+
+    // Datos listos para la gráfica de distribución
+    // categoryRevenue: categoryStats,
   }
 }
 

@@ -99,6 +99,11 @@
     "searchPlaceholder": "Por nombre o SKU",
     "searchTitle": "Buscar productos",
     "emptyMessage": "No hay productos.",
+    "filter": {
+      "title": "Filtrar",
+      "placeholder": "Por categoría",
+      "all": "Todas"
+    },
     "table": {
       "image": "Imagen",
       "name": "Nombre",
@@ -108,7 +113,8 @@
       "price": "Precio",
       "discount": "Descuento",
       "stock": "Stock",
-      "rating": "Calificación"
+      "rating": "Calificación",
+      "quantity": "Cantidad"
     }
   },
   "statsProducts": {
@@ -124,9 +130,45 @@
     "next": "Siguiente",
     "prev": "Anterior"
   },
-  "filter": {
-    "title": "Filtrar",
-    "placeholder": "Por categoría",
-    "all": "Todas"
+  "orders": {
+    "title": "Pedidos",
+    "subtitle": "Lista de pedidos",
+    "searchPlaceholder": "Por cliente o ID de pedido",
+    "searchTitle": "Buscar pedidos",
+    "emptyMessage": "No hay pedidos.",
+    "itemsList": "Lista de productos",
+    "total": "Total",
+    "idOrder": "ID Orden",
+    "netSales": "Ventas totales",
+    "discounts": "Descuentos",
+    "titleChart": "Ingresos vs Descuentos",
+    "subtitleChart": "Impacto de las promociones en el total bruto",
+    "statsOrders": {
+      "totalOrders": "Pedidos Totales",
+      "totalProducts": "Productos Vendidos",
+      "avgValue": "Valor Promedio",
+      "usersWithOrders": "Usuarios con Pedidos",
+      "since": "Desde el último mes"
+    },
+    "filter": {
+      "title": "Filtrar",
+      "placeholder": "Por estado",
+      "all": "Todos"
+    },
+    "table": {
+      "id": "ID",
+      "userId": "Usuario",
+      "customerName": "Cliente",
+      "customerEmail": "Email",
+      "items": "Productos",
+      "total": "Total",
+      "status": {
+        "title": "Estado",
+        "shipped": "Enviado",
+        "processing": "Procesando",
+        "cancelled": "Cancelado",
+        "delivered": "Entregado"
+      }
+    }
   }
 }

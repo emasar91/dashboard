@@ -199,6 +199,7 @@ export default function ProductListContainer({
         <FilterButton
           categories={categories}
           selectedCategory={selectedCategory}
+          intlKey="products.filter"
           onCategoryChange={(category) => {
             setSelectedCategory(category)
             setCurrentPage(1)

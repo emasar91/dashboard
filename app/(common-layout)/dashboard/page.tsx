@@ -9,7 +9,7 @@ import { DollarSign, ShoppingBag, TrendingUp, Users } from "lucide-react"
 import { QueryClient } from "@tanstack/react-query"
 import { getDashboardData } from "@/services/dashboardData"
 
-export default async function Home() {
+async function DashboardPage() {
   const queryClient = new QueryClient()
 
   // Hacemos prefetch para que React Query ya tenga los datos al renderizar
@@ -25,7 +25,7 @@ export default async function Home() {
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 md:gap-4 ">
         <StatCard
           title="totalSales"
-          value={data.stats.totalSales}
+          value={data.totalSales}
           change="+14.2%"
           changeType="positive"
           icon={DollarSign}
@@ -36,7 +36,7 @@ export default async function Home() {
         />
         <StatCard
           title="totalUsers"
-          value={data.stats.totalUsers}
+          value={data.totalUsers}
           change="+7.8%"
           changeType="positive"
           icon={Users}
@@ -47,7 +47,7 @@ export default async function Home() {
         />
         <StatCard
           title="totalOrders"
-          value={data.stats.totalOrders}
+          value={data.totalOrders}
           change="+22.1%"
           changeType="positive"
           icon={ShoppingBag}
@@ -58,7 +58,7 @@ export default async function Home() {
         />
         <StatCard
           title="avgValue"
-          value={data.stats.avgValue}
+          value={data.avgCartValue}
           change="-3.1%"
           changeType="negative"
           icon={TrendingUp}
@@ -97,3 +97,5 @@ export default async function Home() {
     </div>
   )
 }
+
+export default DashboardPage

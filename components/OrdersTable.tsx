@@ -6,8 +6,6 @@ import { formatCurrency } from "@/lib/formatCurrency"
 import { useLocale, useTranslations } from "next-intl"
 import LoadingData from "./LoadingData"
 
-const statusOptions = ["Delivered", "Shipped", "Processing", "Cancelled"]
-
 const statusStyles: Record<string, string> = {
   Delivered: "bg-emerald-500/10 text-emerald-500",
   Shipped: "bg-blue-500/10 text-blue-500",
@@ -61,9 +59,6 @@ export function OrdersTable() {
           </thead>
           <tbody>
             {orders.slice(0, 10).map((cart) => {
-              // Simulamos un status basado en el ID para que sea consistente
-              const status = statusOptions[cart.id % statusOptions.length]
-
               return (
                 <tr
                   key={cart.id}
@@ -88,9 +83,9 @@ export function OrdersTable() {
                   </td>
                   <td className="px-2 py-2.5 text-right">
                     <span
-                      className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium ${statusStyles[status]}`}
+                      className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium ${statusStyles[cart.status]}`}
                     >
-                      {t(`status.${status.toLowerCase()}`)}
+                      {t(`status.${cart.status.toLowerCase()}`)}
                     </span>
                   </td>
                 </tr>

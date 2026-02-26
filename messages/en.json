@@ -1,12 +1,12 @@
 {
   "sidebar": {
     "openSidebar": "Open Sidebar",
-    "user": "Usuario Admin",
+    "user": "Admin User",
     "nameApp": "Dashboard",
     "dashboard": "Dashboard",
     "products": "Products",
     "orders": "Orders",
-    "costumers": "Costumers",
+    "costumers": "Customers",
     "discounts": "Discounts",
     "categories": "Categories",
     "languageSwitcher": {
@@ -16,18 +16,18 @@
   },
   "dashboard": {
     "title": "Dashboard",
-    "subtitle": "Overview of your business"
+    "subtitle": "Business overview"
   },
   "stats": {
     "totalSales": "Total Sales",
     "totalUsers": "Total Users",
     "totalOrders": "Total Orders",
-    "avgValue": "Avg. Value",
+    "avgValue": "Average Value",
     "since": "Since last month"
   },
   "revenueChart": {
     "title": "Revenue Overview",
-    "subtitle": "Monthly revenue & orders",
+    "subtitle": "Monthly Revenue & Orders",
     "loading": "Loading revenue...",
     "month": {
       "jan": "Jan",
@@ -52,7 +52,7 @@
     "each": "each"
   },
   "categoryCard": {
-    "title": "Top Categories",
+    "title": "Top Selling Categories",
     "subtitle": "Revenue distribution",
     "loading": "Loading categories..."
   },
@@ -73,8 +73,8 @@
     }
   },
   "discountsCard": {
-    "title": "Top Deals",
-    "subtitle": "Best discounts available",
+    "title": "Best Deals",
+    "subtitle": "Greatest discounts available",
     "loading": "Loading deals...",
     "stock": "Stock"
   },
@@ -84,21 +84,26 @@
     "loading": "Loading activity...",
     "paymentReceived": "Payment received from {name} for {amount}",
     "newOrder": "New order from {name} for {amount}",
-    "newReview": "{name} left a review of {rating} stars",
+    "newReview": "{name} left a {rating} star review",
     "newCustomer": "New customer registered: {name}",
-    "orderShipped": "Order from {name} shipped",
-    "orderDelivered": "Order from {name} delivered",
-    "orderCancelled": "Order from {name} cancelled",
-    "orderProcessing": "Order from {name} processing",
+    "orderShipped": "Order for {name} shipped",
+    "orderDelivered": "Order for {name} delivered",
+    "orderCancelled": "Order for {name} cancelled",
+    "orderProcessing": "Order for {name} processing",
     "justNow": "Just now",
     "minutesAgo": "{count}m"
   },
   "products": {
     "title": "Products",
-    "subtitle": "List of products",
+    "subtitle": "Product list",
     "searchPlaceholder": "By name or SKU",
     "searchTitle": "Search products",
     "emptyMessage": "No products found.",
+    "filter": {
+      "title": "Filter",
+      "placeholder": "By category",
+      "all": "All"
+    },
     "table": {
       "image": "Image",
       "name": "Name",
@@ -108,7 +113,8 @@
       "price": "Price",
       "discount": "Discount",
       "stock": "Stock",
-      "rating": "Rating"
+      "rating": "Rating",
+      "quantity": "Quantity"
     }
   },
   "statsProducts": {
@@ -124,9 +130,45 @@
     "next": "Next",
     "prev": "Previous"
   },
-  "filter": {
-    "title": "Filter",
-    "placeholder": "By category",
-    "all": "All"
+  "orders": {
+    "title": "Orders",
+    "subtitle": "Order list",
+    "searchPlaceholder": "By customer or order ID",
+    "searchTitle": "Search orders",
+    "emptyMessage": "No orders found.",
+    "itemsList": "Product list",
+    "total": "Total",
+    "idOrder": "Order ID",
+    "netSales": "Total Sales",
+    "discounts": "Discounts",
+    "titleChart": "Revenue vs Discounts",
+    "subtitleChart": "Impact of promotions on gross total",
+    "statsOrders": {
+      "totalOrders": "Total Orders",
+      "totalProducts": "Products Sold",
+      "avgValue": "Average Value",
+      "usersWithOrders": "Users with Orders",
+      "since": "Since last month"
+    },
+    "filter": {
+      "title": "Filter",
+      "placeholder": "By status",
+      "all": "All"
+    },
+    "table": {
+      "id": "ID",
+      "userId": "User",
+      "customerName": "Customer Name",
+      "customerEmail": "Email",
+      "items": "Items",
+      "total": "Total",
+      "status": {
+        "title": "Status",
+        "shipped": "Shipped",
+        "processing": "Processing",
+        "cancelled": "Cancelled",
+        "delivered": "Delivered"
+      }
+    }
   }
 }

@@ -25,19 +25,20 @@ interface TableCustomProps<T> {
   columns: Column<T>[]
   initialPageSize?: number
   emptyMessage?: string
-  currentPage: number
-  onPageChange: (page: number) => void
+  currentPage?: number
+  onPageChange?: (page: number) => void
+  pagination?: boolean
 }
 
 export function TableCustom<T>({
   data,
   columns,
   initialPageSize = 10,
-  emptyMessage,
-  currentPage,
-  onPageChange,
+  emptyMessage = "No data available",
+  currentPage = 1,
+  onPageChange = () => {},
+  pagination = true,
 }: TableCustomProps<T>) {
-  // Lógica de Paginación Interna
   const [pageSize, setPageSize] = useState(initialPageSize)
 
   const totalItems = data.length
@@ -46,7 +47,7 @@ export function TableCustom<T>({
 
   const handlePageSizeChange = (value: string) => {
     setPageSize(Number(value))
-    onPageChange(1)
+    onPageChange?.(1)
   }
 
   return (
@@ -107,13 +108,15 @@ export function TableCustom<T>({
         </Table>
       </div>
 
-      <TablePagination
-        totalItems={totalItems}
-        pageSize={pageSize}
-        currentPage={currentPage}
-        onPageChange={onPageChange}
-        onPageSizeChange={handlePageSizeChange}
-      />
+      {pagination && (
+        <TablePagination
+          totalItems={totalItems}
+          pageSize={pageSize}
+          currentPage={currentPage}
+          onPageChange={onPageChange}
+          onPageSizeChange={handlePageSizeChange}
+        />
+      )}
     </div>
   )
 }

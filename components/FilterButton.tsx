@@ -16,14 +16,16 @@ interface FilterButtonProps {
   categories: string[]
   selectedCategory: string
   onCategoryChange: (category: string) => void
+  intlKey: string
 }
 
 export function FilterButton({
   categories,
   selectedCategory,
   onCategoryChange,
+  intlKey,
 }: FilterButtonProps) {
-  const t = useTranslations("filter")
+  const t = useTranslations(intlKey)
 
   return (
     <DropdownMenu>

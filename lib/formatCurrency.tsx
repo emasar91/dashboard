@@ -1,4 +1,8 @@
-export const formatCurrency = (value: number, locale: string = "en") => {
+export const formatCurrency = (
+  value: number | null | undefined,
+  locale: string = "en",
+) => {
+  if (!value) return "$0"
   const settings = {
     en: { locale: "en-US", currency: "USD" },
     es: { locale: "es-AR", currency: "ARS" },
