@@ -15,18 +15,18 @@ interface CustomersPageProps {
 async function CustomersPage({ searchParams }: CustomersPageProps) {
   const queryClient = new QueryClient()
 
-  // Hacemos prefetch para que React Query ya tenga los datos al renderizar
-  await queryClient.prefetchQuery({
-    queryKey: ["dashboard-data"],
-    queryFn: getDashboardData,
-  })
-
-  const data = await getDashboardData()
-  const params = await searchParams
+  const [data, params] = await Promise.all([
+    getDashboardData(),
+    searchParams,
+    queryClient.prefetchQuery({
+      queryKey: ["dashboard-data"],
+      queryFn: getDashboardData,
+    }),
+  ])
 
   const selectedUserId = params?.userId
   const selectedUser =
-    data.users.find((c) => c.id.toString() === selectedUserId) || data.users[0] // Por defecto el primero o null
+    data.users.find((c) => c.id.toString() === selectedUserId) || data.users[0]
 
   return (
     <div className="max-w-7xl space-y-3 md:space-y-4 mx-auto">

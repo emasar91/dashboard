@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useMemo, useState } from "react"
 import SearchBar from "@/components/SearchBar"
 import { FilterButton } from "@/components/FilterButton"
 import { useTranslations } from "next-intl"
@@ -24,26 +24,22 @@ export default function ProductList({
   const t = useTranslations("products")
   const locale = useLocale()
 
-  // 1. Nuevo estado de filtros múltiples
   const [selectedFilters, setSelectedFilters] = useState<
     Record<string, string[]>
   >({
     category: ["all"],
   })
   const [searchQuery, setSearchQuery] = useState("")
-  const [filteredProducts, setFilteredProducts] = useState(products)
   const [currentPage, setCurrentPage] = useState(1)
 
-  // 2. Definición de grupos para el FilterButton
   const filterGroups = [
     {
-      label: t("filter.placeholder"), // Asegúrate de tener esta clave en tu i18n
+      label: t("filter.placeholder"),
       key: "category",
       options: categories,
     },
   ]
 
-  // 3. Manejador de cambio de filtros corregido
   const handleFilterChange = (key: string, value: string) => {
     setSelectedFilters((prev) => {
       const currentGroup = prev[key] || []
@@ -52,13 +48,11 @@ export default function ProductList({
       if (value === "all") {
         newGroup = ["all"]
       } else {
-        // Quitamos "all" si estaba presente al seleccionar una categoría específica
         const cleanGroup = currentGroup.filter((v) => v !== "all")
         newGroup = cleanGroup.includes(value)
-          ? cleanGroup.filter((v) => v !== value) // Toggle off
-          : [...cleanGroup, value] // Toggle on
+          ? cleanGroup.filter((v) => v !== value)
+          : [...cleanGroup, value]
 
-        // Si el grupo queda vacío, volvemos a "all" por defecto
         if (newGroup.length === 0) newGroup = ["all"]
       }
 
@@ -68,20 +62,14 @@ export default function ProductList({
   }
 
   const handleClearFilters = () => {
-    // Reseteamos al estado inicial (solo "all" en categoría)
     setSelectedFilters({
       category: ["all"],
-      // Si tienes género o edad en Clientes, añádelos aquí también:
-      // gender: [],
-      // age: []
     })
     setCurrentPage(1)
   }
 
-  // 4. useEffect de filtrado actualizado
-  useEffect(() => {
-    const filtered = products.filter((product) => {
-      // Filtro de Categoría (soporta selección múltiple)
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
       const selectedCats = selectedFilters.category
       const matchesCategory =
         selectedCats.includes("all") ||
@@ -89,7 +77,6 @@ export default function ProductList({
           (cat) => cat.toLowerCase() === product.category.toLowerCase(),
         )
 
-      // Filtro de Búsqueda
       const query = searchQuery.toLowerCase().trim()
       const matchesQuery =
         query === "" ||
@@ -98,9 +85,6 @@ export default function ProductList({
 
       return matchesCategory && matchesQuery
     })
-
-    //eslint-disable-next-line
-    setFilteredProducts(filtered)
   }, [selectedFilters, searchQuery, products])
 
   const productColumns: Column<Product>[] = [
@@ -248,7 +232,6 @@ export default function ProductList({
             setCurrentPage(1)
           }}
         />
-        {/* Usamos el nuevo FilterButton con soporte para grupos */}
         <FilterButton
           groups={filterGroups}
           selectedFilters={selectedFilters}

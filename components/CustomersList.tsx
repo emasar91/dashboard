@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useMemo, useState } from "react"
 import SearchBar from "@/components/SearchBar"
 import { FilterButton } from "@/components/FilterButton"
 import { useTranslations } from "next-intl"
@@ -13,7 +13,6 @@ import Image from "next/image"
 export default function CustomersList({ users }: { users: User[] }) {
   const t = useTranslations("customers")
   const [searchQuery, setSearchQuery] = useState("")
-  const [filteredUsers, setFilteredUsers] = useState(users)
   const [currentPage, setCurrentPage] = useState(1)
 
   const [selectedFilters, setSelectedFilters] = useState<
@@ -66,10 +65,8 @@ export default function CustomersList({ users }: { users: User[] }) {
     setCurrentPage(1)
   }
 
-  // 4. useEffect de filtrado para Usuarios
-  useEffect(() => {
-    const filtered = users.filter((user) => {
-      // Filtro de Búsqueda (Nombre, Email o ID)
+  const filteredUsers = useMemo(() => {
+    return users.filter((user) => {
       const query = searchQuery.toLowerCase().trim()
       const matchesQuery =
         query === "" ||
@@ -77,12 +74,10 @@ export default function CustomersList({ users }: { users: User[] }) {
         user.email.toLowerCase().includes(query) ||
         user.id.toString().includes(query)
 
-      // Filtro de Género
       const matchesGender =
         selectedFilters.gender.includes("all") ||
         selectedFilters.gender.includes(user.gender.toLowerCase())
 
-      // Filtro de Edad (Rangos)
       const matchesAge =
         selectedFilters.age.includes("all") ||
         selectedFilters.age.some((range) => {
@@ -92,8 +87,6 @@ export default function CustomersList({ users }: { users: User[] }) {
 
       return matchesQuery && matchesGender && matchesAge
     })
-    // eslint-disable-next-line
-    setFilteredUsers(filtered)
   }, [selectedFilters, searchQuery, users])
 
   const customerColumns: Column<User>[] = [

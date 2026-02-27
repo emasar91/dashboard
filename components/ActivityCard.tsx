@@ -28,7 +28,6 @@ export function ActivityCard() {
   })
   const t = useTranslations("activityCard")
 
-  // Generamos la actividad basada en los datos reales de la API
   const activities = dashboardData
     ? getRecentActivity(dashboardData.carts, dashboardData.users || [], t)
     : []
@@ -46,12 +45,12 @@ export function ActivityCard() {
         <p className="text-xs text-muted-foreground">{t("subtitle")}</p>
       </div>
       <div className="flex-1 overflow-auto space-y-1 pr-1">
-        {activities.map((activity, i) => {
+        {activities.map((activity) => {
           const Icon = IconMap[activity.icon] || Package
 
           return (
             <div
-              key={i}
+              key={activity.text}
               className="group flex items-start gap-3 rounded-lg p-2 transition-colors hover:bg-secondary/50"
             >
               <div

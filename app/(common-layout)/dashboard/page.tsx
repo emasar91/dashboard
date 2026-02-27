@@ -1,6 +1,5 @@
+import dynamic from "next/dynamic"
 import { ActivityCard } from "@/components/ActivityCard"
-import { CategoryCard } from "@/components/CategoryCard"
-import { ChartOverTime } from "@/components/ChartOverTimer"
 import { DiscountsCard } from "@/components/DiscountCard"
 import { OrdersTable } from "@/components/OrdersTable"
 import { StatCard } from "@/components/StateCard"
@@ -9,10 +8,19 @@ import { DollarSign, ShoppingBag, TrendingUp, Users } from "lucide-react"
 import { QueryClient } from "@tanstack/react-query"
 import { getDashboardData } from "@/services/dashboardData"
 
+const CategoryCard = dynamic(
+  () => import("@/components/CategoryCard").then((m) => ({ default: m.CategoryCard })),
+  { ssr: false },
+)
+
+const ChartOverTime = dynamic(
+  () => import("@/components/ChartOverTimer").then((m) => ({ default: m.ChartOverTime })),
+  { ssr: false },
+)
+
 async function DashboardPage() {
   const queryClient = new QueryClient()
 
-  // Hacemos prefetch para que React Query ya tenga los datos al renderizar
   await queryClient.prefetchQuery({
     queryKey: ["dashboard-data"],
     queryFn: getDashboardData,

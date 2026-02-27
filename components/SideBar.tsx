@@ -66,7 +66,13 @@ export function Sidebar({ currentSelected }: { currentSelected: string }) {
           "fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 sm:hidden ",
           openSidebar ? "opacity-100" : "pointer-events-none opacity-0",
         )}
+        role="button"
+        tabIndex={0}
+        aria-label="Close sidebar"
         onClick={() => setOpenSidebar(false)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") setOpenSidebar(false)
+        }}
       />
 
       {/* Contenedor del Sidebar */}

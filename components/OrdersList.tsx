@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useMemo, useState } from "react"
 import SearchBar from "@/components/SearchBar"
 import { FilterButton } from "@/components/FilterButton"
 import { useTranslations } from "next-intl"
@@ -24,21 +24,18 @@ export default function OrdersList({
   const locale = useLocale()
   const router = useRouter()
 
-  // 1. Estado de filtros múltiples (igual que en productos)
   const [selectedFilters, setSelectedFilters] = useState<
     Record<string, string[]>
   >({
     status: ["all"],
   })
   const [searchQuery, setSearchQuery] = useState("")
-  const [filteredOrders, setFilteredOrders] = useState(orders)
   const [currentPage, setCurrentPage] = useState(1)
 
   const selectCart = (id: number) => {
     router.push(`?cartId=${id}`, { scroll: false })
   }
 
-  // 2. Definición del grupo para el FilterButton
   const filterGroups = [
     {
       label: t("filter.placeholder"),
@@ -47,7 +44,6 @@ export default function OrdersList({
     },
   ]
 
-  // 3. Función para manejar el cambio de filtros (Toggle logic)
   const handleFilterChange = (key: string, value: string) => {
     setSelectedFilters((prev) => {
       const currentGroup = prev[key] || []
@@ -69,16 +65,13 @@ export default function OrdersList({
     setCurrentPage(1)
   }
 
-  // 4. Función para limpiar filtros
   const handleClearFilters = () => {
     setSelectedFilters({ status: ["all"] })
     setCurrentPage(1)
   }
 
-  // 5. useEffect de filtrado actualizado para multiselección
-  useEffect(() => {
-    const filtered = orders.filter((order) => {
-      // Filtro por Status (soporta múltiples estados)
+  const filteredOrders = useMemo(() => {
+    return orders.filter((order) => {
       const selectedStatus = selectedFilters.status
       const matchesStatus =
         selectedStatus.includes("all") ||
@@ -86,7 +79,6 @@ export default function OrdersList({
           (s) => s.toLowerCase() === order.status.toLowerCase(),
         )
 
-      // Filtro por Búsqueda (Nombre de cliente o ID de orden)
       const query = searchQuery.toLowerCase().trim()
       const matchesQuery =
         query === "" ||
@@ -95,8 +87,6 @@ export default function OrdersList({
 
       return matchesStatus && matchesQuery
     })
-    //eslint-disable-next-line
-    setFilteredOrders(filtered)
   }, [selectedFilters, searchQuery, orders])
 
   const productColumns: Column<Cart>[] = [
@@ -166,7 +156,12 @@ export default function OrdersList({
             <TooltipTrigger asChild>
               <span
                 className="cursor-pointer block truncate text-sm hover:text-primary transition-colors"
+                role="button"
+                tabIndex={0}
                 onClick={() => selectCart(item.id)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") selectCart(item.id)
+                }}
               >
                 {item.products[0]?.title}
                 {extraCount > 0 && (

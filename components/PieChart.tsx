@@ -38,7 +38,6 @@ function CustomTooltip({
   )
 }
 
-// Definimos la interfaz para la data
 export interface ChartDataEntry {
   name: string
   value: number
@@ -48,7 +47,7 @@ interface PieChartProps {
   data: ChartDataEntry[]
   title?: string
   subtitle?: string
-  className?: string // Para el h-full que hablamos antes
+  className?: string
 }
 
 export function PieChartCustom({
@@ -95,9 +94,9 @@ export function PieChartCustom({
                 dataKey="value"
                 stroke="none"
               >
-                {data.map((_, i) => (
+                {data.map((item, i) => (
                   <Cell
-                    key={`cell-${i}`}
+                    key={item.name}
                     fill={chartColors[i % chartColors.length]}
                   />
                 ))}

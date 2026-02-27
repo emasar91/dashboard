@@ -74,9 +74,9 @@ export function TableCustom<T extends { id: string | number }>({
           </TableHeader>
           <TableBody>
             {currentData.length > 0 ? (
-              currentData.map((item, index) => (
+              currentData.map((item) => (
                 <TableRow
-                  key={index}
+                  key={item.id}
                   className="border-b border-gray-100 dark:bg-[#16181d] dark:border-slate-800 last:border-0 hover:bg-gray-50/50 dark:hover:bg-slate-900/50 transition-colors cursor-pointer"
                   onClick={() => onRowClick?.(item)}
                 >

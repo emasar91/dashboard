@@ -1,4 +1,4 @@
-import { PieChartCustom } from "@/components/PieChart"
+import dynamic from "next/dynamic"
 import OrdersList from "@/components/OrdersList"
 import { StatCard } from "@/components/StateCard"
 import { getDashboardData } from "@/services/dashboardData"
@@ -6,6 +6,11 @@ import { QueryClient } from "@tanstack/react-query"
 import { Handbag, Receipt, Package, FileUser } from "lucide-react"
 import CartDetail from "@/components/CartDetail"
 import { getTranslations } from "next-intl/server"
+
+const PieChartCustom = dynamic(
+  () => import("@/components/PieChart").then((m) => ({ default: m.PieChartCustom })),
+  { ssr: false },
+)
 
 interface OrdersPageProps {
   searchParams: {
@@ -16,19 +21,19 @@ interface OrdersPageProps {
 async function OrdersPage({ searchParams }: OrdersPageProps) {
   const queryClient = new QueryClient()
 
-  const t = await getTranslations("orders")
-  // Hacemos prefetch para que React Query ya tenga los datos al renderizar
-  await queryClient.prefetchQuery({
-    queryKey: ["dashboard-data"],
-    queryFn: getDashboardData,
-  })
-
-  const data = await getDashboardData()
-  const params = await searchParams
+  const [t, data, params] = await Promise.all([
+    getTranslations("orders"),
+    getDashboardData(),
+    searchParams,
+    queryClient.prefetchQuery({
+      queryKey: ["dashboard-data"],
+      queryFn: getDashboardData,
+    }),
+  ])
 
   const selectedCartId = params?.cartId
   const selectedCart =
-    data.carts.find((c) => c.id.toString() === selectedCartId) || data.carts[0] // Por defecto el primero o null
+    data.carts.find((c) => c.id.toString() === selectedCartId) || data.carts[0]
 
   const financeData = [
     { name: t("netSales"), value: data.totalSales },
