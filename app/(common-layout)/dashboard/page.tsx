@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic"
 import { ActivityCard } from "@/components/ActivityCard"
 import { DiscountsCard } from "@/components/DiscountCard"
 import { OrdersTable } from "@/components/OrdersTable"
@@ -7,15 +6,15 @@ import { TopSelling } from "@/components/TopSelling"
 import { DollarSign, ShoppingBag, TrendingUp, Users } from "lucide-react"
 import { QueryClient } from "@tanstack/react-query"
 import { getDashboardData } from "@/services/dashboardData"
+import { NoSSR } from "@/components/NoSSR"
+import dynamic from "next/dynamic"
 
-const CategoryCard = dynamic(
-  () => import("@/components/CategoryCard").then((m) => ({ default: m.CategoryCard })),
-  { ssr: false },
+const LazyChartOverTime = dynamic(() =>
+  import("@/components/ChartOverTimer").then((m) => m.ChartOverTime),
 )
 
-const ChartOverTime = dynamic(
-  () => import("@/components/ChartOverTimer").then((m) => ({ default: m.ChartOverTime })),
-  { ssr: false },
+const LazyCategoryCard = dynamic(() =>
+  import("@/components/CategoryCard").then((m) => m.CategoryCard),
 )
 
 async function DashboardPage() {
@@ -79,7 +78,9 @@ async function DashboardPage() {
 
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-8 md:gap-4">
         <div className="min-h-[300px] md:col-span-2 lg:col-span-3 lg:min-h-[350px]">
-          <ChartOverTime />
+          <NoSSR>
+            <LazyChartOverTime />
+          </NoSSR>
         </div>
 
         <div className="min-h-[280px] lg:col-span-3">
@@ -87,7 +88,9 @@ async function DashboardPage() {
         </div>
 
         <div className="min-h-[240px] lg:col-span-2">
-          <CategoryCard />
+          <NoSSR>
+            <LazyCategoryCard />
+          </NoSSR>
         </div>
       </div>
 

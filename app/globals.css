@@ -130,3 +130,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+.no-focus-outline *:focus {
+  outline: none !important;
+  box-shadow: none !important; /* A veces el enfoque se da por box-shadow */
+}

@@ -230,5 +230,84 @@
         "moderator": "Moderator"
       }
     }
+  },
+  "discounts": {
+    "title": "Discounts",
+    "subtitle": "Discount list",
+    "chart": {
+      "finalPrice": "Final Price",
+      "discountAmount": "Savings",
+      "title": "Revenue vs Discounts",
+      "subtitle": "Impact of promotions on gross total",
+      "textCenter": "Price without discount"
+    },
+    "searchPlaceholder": "By name or Id",
+    "searchTitle": "Search products",
+    "emptyMessage": "No products found.",
+    "statsDiscounts": {
+      "productsWithDiscount": "Products with Discount",
+      "averageDiscount": "Average Discount",
+      "maxDiscount": "Max Discount",
+      "totalSavingsAmount": "Total Savings",
+      "since": "Since last month"
+    },
+    "filter": {
+      "title": "Filter",
+      "category": "By category",
+      "rangeDiscount": {
+        "title": "By discount range",
+        "low": "Up to 10%",
+        "mid": "From 10% to 30%",
+        "high": "More than 30%"
+      },
+      "stock": {
+        "title": "By stock",
+        "empty": "No Stock",
+        "low": "Low Stock (1-20)",
+        "ok": "Sufficient (21-50)",
+        "high": "Abundant (+50)"
+      },
+      "all": "Clear filters"
+    },
+    "table": {
+      "id": "ID",
+      "image": "Image",
+      "name": "Name",
+      "category": "Category",
+      "price": "Price",
+      "discount": "Discount",
+      "finalPrice": "Final Price",
+      "stock": "Stock"
+    },
+    "discountDetail": {
+      "product": {
+        "pricing": "Pricing",
+        "basePrice": "Base Price",
+        "discount": "Discount",
+        "rating": "Rating",
+        "savings": "Savings",
+        "minOrder": "Minimum Order",
+        "stock": "Stock",
+        "sku": "SKU",
+        "shipping": "Shipping",
+        "returnPolicy": "Return Policy",
+        "specs": "Specifications",
+        "dimensions": "Dimensions",
+        "weight": "Weight",
+        "warranty": "Warranty",
+        "description": "Description"
+      },
+      "inventory": {
+        "title": "Inventory",
+        "stock": "Stock",
+        "minOrder": "Minimum Order",
+        "sku": "SKU"
+      },
+      "logistics": {
+        "title": "Logistics",
+        "shipping": "Shipping",
+        "returnPolicy": "Return Policy"
+      }
+    }
   }
 }

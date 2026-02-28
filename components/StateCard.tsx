@@ -8,7 +8,7 @@ interface StatCardProps {
   change: string
   changeType: "positive" | "negative"
   icon: LucideIcon
-  type: "currency" | "number"
+  type: "currency" | "number" | "percentage"
   since: string
   trend: "up" | "down"
   intl: string
@@ -36,7 +36,11 @@ export async function StatCard({
             {t(title)}
           </p>
           <p className="text-2xl font-bold tracking-tight text-card-foreground lg:text-3xl">
-            {type === "currency" ? formatCurrency(value, locale) : value}
+            {type === "currency"
+              ? formatCurrency(value, locale)
+              : type === "percentage"
+                ? `${value.toFixed(2)}%`
+                : value}
           </p>
         </div>
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary lg:h-10 lg:w-10">

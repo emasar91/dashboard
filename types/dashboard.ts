@@ -123,6 +123,19 @@ export interface Product {
   images: string[]
   sku: string
   availabilityStatus: string
+  discountedPrice: number
+  minimumOrderQuantity: number
+  dimensions: Dimensions
+  weight: number
+  shippingInformation: string
+  returnPolicy: string
+  warrantyInformation: string
+}
+
+export interface Dimensions {
+  width: number
+  height: number
+  depth: number
 }
 
 export interface ProductsResponse {

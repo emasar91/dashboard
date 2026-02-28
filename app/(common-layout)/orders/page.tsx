@@ -6,10 +6,10 @@ import { QueryClient } from "@tanstack/react-query"
 import { Handbag, Receipt, Package, FileUser } from "lucide-react"
 import CartDetail from "@/components/CartDetail"
 import { getTranslations } from "next-intl/server"
+import { NoSSR } from "@/components/NoSSR"
 
-const PieChartCustom = dynamic(
-  () => import("@/components/PieChart").then((m) => ({ default: m.PieChartCustom })),
-  { ssr: false },
+const LazyPieChartCustom = dynamic(() =>
+  import("@/components/PieChart").then((m) => m.PieChartCustom),
 )
 
 interface OrdersPageProps {
@@ -93,12 +93,14 @@ async function OrdersPage({ searchParams }: OrdersPageProps) {
       </div>
       <div className="grid grid-cols-1 gap-y-2 sm:grid-cols-2 lg:grid-cols-4 md:gap-4">
         <div className="col-span-1 sm:col-span-2 lg:col-span-1">
-          <PieChartCustom
-            data={financeData}
-            title={t("titleChart")}
-            subtitle={t("subtitleChart")}
-            className="h-full"
-          />
+          <NoSSR>
+            <LazyPieChartCustom
+              data={financeData}
+              title={t("titleChart")}
+              subtitle={t("subtitleChart")}
+              className="h-full"
+            />
+          </NoSSR>
         </div>
         <div className="col-span-2 flex ">
           <CartDetail cart={selectedCart} />

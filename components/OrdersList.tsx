@@ -154,15 +154,7 @@ export default function OrdersList({
         return (
           <Tooltip>
             <TooltipTrigger asChild>
-              <span
-                className="cursor-pointer block truncate text-sm hover:text-primary transition-colors"
-                role="button"
-                tabIndex={0}
-                onClick={() => selectCart(item.id)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") selectCart(item.id)
-                }}
-              >
+              <span className="cursor-pointer block truncate text-sm hover:text-primary transition-colors">
                 {item.products[0]?.title}
                 {extraCount > 0 && (
                   <span className="text-blue-400 font-medium ml-1">
@@ -239,6 +231,7 @@ export default function OrdersList({
         emptyMessage={t("emptyMessage")}
         currentPage={currentPage}
         onPageChange={setCurrentPage}
+        onRowClick={(item: Cart) => selectCart(item.id)}
       />
     </div>
   )

@@ -230,5 +230,84 @@
         "moderator": "Moderador"
       }
     }
+  },
+  "discounts": {
+    "title": "Descuentos",
+    "subtitle": "Lista de descuentos",
+    "chart": {
+      "finalPrice": "Precio Final",
+      "discountAmount": "Ahorro",
+      "title": "Ingresos vs Descuentos",
+      "subtitle": "Impacto de las promociones en el total bruto",
+      "textCenter": "Precio sin descuento"
+    },
+    "searchPlaceholder": "Por nombre o Id",
+    "searchTitle": "Buscar productos",
+    "emptyMessage": "No hay productos.",
+    "statsDiscounts": {
+      "productsWithDiscount": "Productos con Descuento",
+      "averageDiscount": "Descuento Promedio",
+      "maxDiscount": "Max Descuento",
+      "totalSavingsAmount": "Pérdida por Descuentos",
+      "since": "Desde el último mes"
+    },
+    "filter": {
+      "title": "Filtrar",
+      "category": "Por categoría",
+      "rangeDiscount": {
+        "title": "Por rango de descuento",
+        "low": "Hasta 10%",
+        "mid": "Desde 10% hasta 30%",
+        "high": "Más de 30%"
+      },
+      "stock": {
+        "title": "Por stock",
+        "empty": "Sin Stock",
+        "low": "Stock Bajo (1-20)",
+        "ok": "Suficiente (21-50)",
+        "high": "Abundante (+50)"
+      },
+      "all": "Borrar filtros"
+    },
+    "table": {
+      "id": "ID",
+      "image": "Imagen",
+      "name": "Nombre",
+      "category": "Categoria",
+      "price": "Precio",
+      "discount": "Descuento",
+      "finalPrice": "Precio Final",
+      "stock": "Stock"
+    },
+    "discountDetail": {
+      "product": {
+        "pricing": "Precios",
+        "basePrice": "Precio Base",
+        "discount": "Descuento",
+        "rating": "Calificación",
+        "savings": "Ahorro",
+        "minOrder": "Pedido Mínimo",
+        "stock": "Stock",
+        "sku": "SKU",
+        "shipping": "Envío",
+        "returnPolicy": "Política de Devolución",
+        "specs": "Especificaciones",
+        "dimensions": "Dimensiones",
+        "weight": "Peso",
+        "warranty": "Garantía",
+        "description": "Descripción"
+      },
+      "inventory": {
+        "title": "Inventario",
+        "stock": "Stock",
+        "minOrder": "Pedido Mínimo",
+        "sku": "SKU"
+      },
+      "logistics": {
+        "title": "Logística",
+        "shipping": "Envío",
+        "returnPolicy": "Política de Devolución"
+      }
+    }
   }
 }
