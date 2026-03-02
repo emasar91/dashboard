@@ -20,53 +20,55 @@ async function CustomersPage({ searchParams }: CustomersPageProps) {
     searchParams,
     queryClient.prefetchQuery({
       queryKey: ["dashboard-data"],
-      queryFn: getDashboardData,
+      queryFn: () => getDashboardData(),
     }),
   ])
 
+  const { customerKpis, users } = data
+
   const selectedUserId = params?.userId
   const selectedUser =
-    data.users.find((c) => c.id.toString() === selectedUserId) || data.users[0]
+    users.find((c) => c.id.toString() === selectedUserId) || users[0]
 
   return (
     <div className="max-w-7xl space-y-3 md:space-y-4 mx-auto">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 md:gap-4">
         <StatCard
           title="totalUsers"
-          value={data.totalUsers}
-          change="+7.8%"
-          changeType="positive"
+          value={customerKpis.totalUsers.value}
+          change={customerKpis.totalUsers.trend.change}
+          changeType={customerKpis.totalUsers.trend.changeType}
           icon={Users}
           type="number"
           since="since"
-          trend="up"
+          trend={customerKpis.totalUsers.trend.trend}
           intl="customers.statsCustomers"
         />
         <StatCard
           title="usersActive"
-          value={data.usersWithOrders}
-          change="+22.1%"
-          changeType="positive"
+          value={customerKpis.usersActive.value}
+          change={customerKpis.usersActive.trend.change}
+          changeType={customerKpis.usersActive.trend.changeType}
           icon={UserCheck}
           type="number"
           since="since"
-          trend="up"
+          trend={customerKpis.usersActive.trend.trend}
           intl="customers.statsCustomers"
         />
         <StatCard
           title="newCustomers"
-          value={data.totalUsers / 4}
-          change="+3.1%"
-          changeType="negative"
+          value={customerKpis.newCustomers.value}
+          change={customerKpis.newCustomers.trend.change}
+          changeType={customerKpis.newCustomers.trend.changeType}
           icon={UserPlus}
           type="number"
           since="since"
-          trend="down"
+          trend={customerKpis.newCustomers.trend.trend}
           intl="customers.statsCustomers"
         />
       </div>
       <div>
-        <CustomersList users={data.users} />
+        <CustomersList users={users} />
       </div>
       <div className="flex">
         {selectedUser && (

@@ -96,7 +96,7 @@ export function FilterButton({
                   onSelect={(e) => e.preventDefault()}
                   onCheckedChange={() => onFilterChange(group.key, value)}
                 >
-                  {label}
+                  {label?.replaceAll("-", " ")}
                 </DropdownMenuCheckboxItem>
               )
             })}

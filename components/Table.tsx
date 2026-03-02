@@ -53,7 +53,7 @@ export function TableCustom<T extends { id: string | number }>({
   }
 
   return (
-    <div className="w-full space-y-4 mt-7">
+    <div className="w-full space-y-4">
       <div className="rounded-xl border border-gray-200 dark:border-slate-800 overflow-hidden bg-white dark:bg-slate-950">
         <Table className="w-full table-fixed">
           <TableHeader className="bg-gray-50 dark:bg-slate-900/50">

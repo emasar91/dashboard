@@ -1,7 +1,5 @@
 "use client"
 
-import { useQuery } from "@tanstack/react-query"
-import { getDashboardData, getRecentActivity } from "@/services/dashboardData"
 import {
   ShoppingCart,
   UserPlus,
@@ -11,7 +9,7 @@ import {
   type LucideIcon,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
-import LoadingData from "./LoadingData"
+import { Activity } from "@/types/dashboard"
 
 const IconMap: Record<string, LucideIcon> = {
   ShoppingCart,
@@ -21,20 +19,14 @@ const IconMap: Record<string, LucideIcon> = {
   CreditCard,
 }
 
-export function ActivityCard() {
-  const { data: dashboardData, isLoading } = useQuery({
-    queryKey: ["dashboard-data"],
-    queryFn: getDashboardData,
-  })
-  const t = useTranslations("activityCard")
+interface ActivityProps {
+  data: Activity[]
+}
 
-  const activities = dashboardData
-    ? getRecentActivity(dashboardData.carts, dashboardData.users || [], t)
-    : []
+export function ActivityCard({ data }: ActivityProps) {
+  const t = useTranslations("dashboard.recentActivity")
 
-  if (isLoading) {
-    return <LoadingData title={t("loading")} className="min-h-[560px]" />
-  }
+  const activities = data
 
   return (
     <div className="flex h-full flex-col rounded-xl border border-border bg-card p-4 lg:p-5 min-h-[560px]">

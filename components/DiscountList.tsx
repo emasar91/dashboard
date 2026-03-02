@@ -23,7 +23,6 @@ export default function DiscountList({
   products,
   categories,
 }: DiscountListProps) {
-  console.log("🚀 ~ products:", products)
   const t = useTranslations("discounts")
   const [searchQuery, setSearchQuery] = useState("")
   const [currentPage, setCurrentPage] = useState(1)

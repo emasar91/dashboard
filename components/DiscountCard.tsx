@@ -1,24 +1,18 @@
 "use client"
 
-import { useQuery } from "@tanstack/react-query"
-import { getDashboardData } from "@/services/dashboardData"
 import { Percent, ArrowDown, ShoppingBag } from "lucide-react"
 import { useTranslations } from "next-intl"
-import LoadingData from "./LoadingData"
+import { Product } from "@/types/dashboard"
 
-export function DiscountsCard() {
-  const { data: dashboardData, isLoading } = useQuery({
-    queryKey: ["dashboard-data"],
-    queryFn: getDashboardData,
-  })
+interface DiscountsCardProps {
+  data: Product[]
+}
 
+export function DiscountsCard({ data }: DiscountsCardProps) {
   const t = useTranslations("discountsCard")
 
   // Tomamos los productos con más descuento que ya vienen del servicio
-  const flashOffers = dashboardData?.discounts || []
-  if (isLoading) {
-    return <LoadingData title={t("loading")} />
-  }
+  const flashOffers = data || []
 
   return (
     <div className="flex h-full flex-col rounded-xl border border-border bg-card p-4 lg:p-5">

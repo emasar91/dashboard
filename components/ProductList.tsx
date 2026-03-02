@@ -99,7 +99,7 @@ export default function ProductList({
           alt={item.title}
           width={50}
           height={50}
-          className="rounded"
+          className="h-12 w-12 rounded-lg object-cover bg-muted"
         />
       ),
     },
@@ -221,7 +221,7 @@ export default function ProductList({
   ]
 
   return (
-    <div>
+    <div className="space-y-4">
       <div className="flex gap-4 items-end justify-between">
         <SearchBar
           placeholder={t("searchPlaceholder")}

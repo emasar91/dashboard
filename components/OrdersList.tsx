@@ -199,14 +199,14 @@ export default function OrdersList({
         <span
           className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium ${statusStyles[item.status.toLowerCase() as keyof typeof statusStyles]}`}
         >
-          {t(`table.status.${item.status.toLowerCase()}`)}
+          {item.status}
         </span>
       ),
     },
   ]
 
   return (
-    <div>
+    <div className="space-y-4">
       <div className="flex gap-4 items-end justify-between">
         <SearchBar
           placeholder={t("searchPlaceholder")}

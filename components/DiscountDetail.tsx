@@ -43,7 +43,7 @@ export default function DiscountDetail({ product }: DiscountDetailProps) {
   const locale = useLocale()
 
   return (
-    <Card className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 lg:p-3 transition-all duration-200 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 w-full">
+    <Card className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 lg:p-4 transition-all duration-200 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 w-full">
       <CardHeader className="flex flex-col sm:flex-row items-center sm:items-start gap-6 space-y-0 text-center sm:text-left">
         {/* CONTENEDOR DE IMAGEN */}
         <div className="relative inline-block shrink-0">
@@ -52,7 +52,7 @@ export default function DiscountDetail({ product }: DiscountDetailProps) {
             alt={product.title}
             width={80} // Un poco más grande para que luzca mejor en móvil
             height={80}
-            className="rounded-full bg-slate-900 border-2 border-primary/20"
+            className="rounded-full bg-muted border-2 border-primary/20"
           />
         </div>
 

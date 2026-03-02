@@ -1,15 +1,13 @@
 import { formatCurrency } from "@/lib/formatCurrency"
-import { getTopSellingProducts } from "@/services/dashboardData"
-import { Cart } from "@/types/dashboard"
+import { TopSellingProduct } from "@/types/dashboard"
 import { getLocale, getTranslations } from "next-intl/server"
 
 interface TopSellingProps {
-  carts: Cart[]
+  data: TopSellingProduct[]
 }
 
-export async function TopSelling({ carts }: TopSellingProps) {
-  const products = getTopSellingProducts(carts)
-  const maxSales = Math.max(...products.map((p) => p.sales))
+export async function TopSelling({ data }: TopSellingProps) {
+  const maxSales = Math.max(...data.map((p) => p.sales))
   const t = await getTranslations("topSelling")
   const locale = await getLocale()
 
@@ -22,7 +20,7 @@ export async function TopSelling({ carts }: TopSellingProps) {
         <p className="text-xs text-muted-foreground">{t("subtitle")}</p>
       </div>
       <div className="flex-1 space-y-3 overflow-auto">
-        {products.map((product, i) => (
+        {data.map((product, i) => (
           <div key={product.name} className="group flex items-center gap-3">
             <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-secondary text-[10px] font-bold text-secondary-foreground">
               {i + 1}

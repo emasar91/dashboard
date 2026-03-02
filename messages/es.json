@@ -16,7 +16,31 @@
   },
   "dashboard": {
     "title": "Tablero",
-    "subtitle": "Resumen de tu negocio"
+    "subtitle": "Resumen de tu negocio",
+    "primaryLabel": "Ingresos",
+    "secondaryLabel": "Pedidos",
+    "chart": {
+      "title": "Distribución de Ingresos",
+      "subtitle": "Por categoría (Top 5)",
+      "textCenter": "Ingresos por categoría",
+      "revenue": "Ingresos",
+      "orders": "Pedidos"
+    },
+    "recentActivity": {
+      "title": "Actividad Reciente",
+      "subtitle": "Últimas actualizaciones",
+      "loading": "Cargando actividad...",
+      "paymentReceived": "Pago recibido de {name} por {amount}",
+      "newOrder": "Nuevo pedido de {name} por {amount}",
+      "newReview": "{name} dejó una reseña de {rating} estrellas",
+      "newCustomer": "Nuevo cliente registrado: {name}",
+      "orderShipped": "Pedido de {name} enviado",
+      "orderDelivered": "Pedido de {name} entregado",
+      "orderCancelled": "Pedido de {name} cancelado",
+      "orderProcessing": "Pedido de {name} en procesamiento",
+      "justNow": "Recién ahora",
+      "minutesAgo": "{count}m"
+    }
   },
   "stats": {
     "totalSales": "Ventas Totales",
@@ -60,10 +84,10 @@
     "title": "Pedidos Recientes",
     "subtitle": "Últimos pedidos realizados",
     "loading": "Cargando pedidos...",
-    "orderId": "ID",
-    "customer": "Cliente",
-    "product": "Producto",
-    "amount": "Monto",
+    "id": "ID",
+    "customerName": "Cliente",
+    "products": "Productos",
+    "total": "Total",
     "status": {
       "title": "Estado",
       "shipped": "Enviado",
@@ -77,21 +101,6 @@
     "subtitle": "Los mayores descuentos disponibles",
     "loading": "Cargando ofertas...",
     "stock": "Stock"
-  },
-  "activityCard": {
-    "title": "Actividad Reciente",
-    "subtitle": "Últimas actualizaciones",
-    "loading": "Cargando actividad...",
-    "paymentReceived": "Pago recibido de {name} por {amount}",
-    "newOrder": "Nuevo pedido de {name} por {amount}",
-    "newReview": "{name} dejó una reseña de {rating} estrellas",
-    "newCustomer": "Nuevo cliente registrado: {name}",
-    "orderShipped": "Pedido de {name} enviado",
-    "orderDelivered": "Pedido de {name} entregado",
-    "orderCancelled": "Pedido de {name} cancelado",
-    "orderProcessing": "Pedido de {name} en procesamiento",
-    "justNow": "Recién ahora",
-    "minutesAgo": "{count}m"
   },
   "products": {
     "title": "Productos",
@@ -143,6 +152,7 @@
     "discounts": "Descuentos",
     "titleChart": "Ingresos vs Descuentos",
     "subtitleChart": "Impacto de las promociones en el total bruto",
+    "textCenter": "Ingresos sin descuentos",
     "statsOrders": {
       "totalOrders": "Pedidos Totales",
       "totalProducts": "Productos Vendidos",
@@ -307,6 +317,73 @@
         "title": "Logística",
         "shipping": "Envío",
         "returnPolicy": "Política de Devolución"
+      }
+    }
+  },
+  "categories": {
+    "title": "Categorias",
+    "subtitle": "Grilla de categorias",
+    "searchPlaceholder": "Por nombre o Id",
+    "searchTitle": "Buscar categorias",
+    "emptyMessage": "No hay categorias.",
+    "productCount": "Productos",
+    "avgDiscount": "Promedio de Descuento: {discount}%",
+    "chart": {
+      "title": "Ingresos por Categoría",
+      "subtitle": "Ingresos por Categoría",
+      "primaryLabel": "Ingresos",
+      "secondaryLabel": "Pedidos",
+      "revenue": "Ingresos",
+      "orders": "Pedidos"
+    },
+    "statsCategories": {
+      "totalCategories": "Categorias Totales",
+      "categoryHighStock": "Categoria Alta (Max Stock)",
+      "categoryLowStock": "Categoria Baja (Min Stock)",
+      "averageDiscount": "Promedio de Descuento General",
+      "currentInventory": "Inventario Actual (Unidades)",
+      "since": "Desde el último mes"
+    },
+    "filter": {
+      "title": "Filtrar",
+      "category": "Por categoria",
+      "rangeDiscount": {
+        "title": "Por rango de descuento",
+        "low": "Hasta 10%",
+        "mid": "Desde 10% hasta 30%",
+        "high": "Más de 30%"
+      },
+      "stock": {
+        "title": "Por stock",
+        "empty": "Sin Stock",
+        "low": "Stock Bajo (1-20)",
+        "ok": "Suficiente (21-50)",
+        "high": "Abundante (+50)"
+      },
+      "all": "Borrar filtros"
+    },
+    "table": {
+      "id": "ID",
+      "image": "Imagen",
+      "name": "Nombre",
+      "description": "Descripción",
+      "parent": "Categoria Padre",
+      "slug": "Slug"
+    },
+    "categoryDetail": {
+      "title": "Detalle de la Categoría",
+      "subtitle": "Información completa de la categoría",
+      "stock": "Unidades en Stock",
+      "lowStockAlerts": "Alertas de Stock Crítico",
+      "topProducts": "Productos Destacados (Top 5)",
+      "close": "Cerrar Detalle",
+      "lowStock": "Solo {stock} restantes",
+      "outOfStock": "Sin Stock",
+      "stats": {
+        "revenue": "Ingresos",
+        "sold": "Vendidos",
+        "inventoryValue": "Valuación",
+        "priceAvg": "Precio Prom."
       }
     }
   }

@@ -146,20 +146,113 @@ export interface ProductsResponse {
 }
 
 export interface DashboardData {
-  totalSales: number
-  totalUsers: number
-  totalOrders: number
-  avgCartValue: number
   carts: Cart[]
   users: User[]
-  discounts: Product[]
   allProducts: Product[]
   allCategories: string[]
-  lowStockProducts: Product[]
-  usersWithOrders: number
+  stats: Stats
+  dashboardKpis: DashboardKpis
+  categoryKpis: CategoryKpis
+  productKpis: ProductKpis
+  orderKpis: OrderKpis
+  customerKpis: CustomerKpis
+  discountKpis: DiscountKpis
+  categoriesAreaChart: CategoriesAreaChart[]
+  revenueByMonthChart: RevenueByMonthChart[]
+  topSellingProducts: TopSellingProduct[]
+  categoriesPieChart: CategoriesPieChart[]
+  recentActivity: Activity[]
+  discountsData: Product[]
+  recentsOrders: Cart[]
+  categoryDetails: Record<string, CategoryDetail>
+}
+
+export interface CategoriesPieChart {
+  name: string
+  value: number
+}
+
+export interface TopSellingProduct {
+  name: string
+  sales: number
+  revenue: string
+  trend: string
+}
+
+export interface RevenueByMonthChart {
+  month: string
+  revenue: number
+  orders: number
+}
+
+export interface CategoriesAreaChart {
+  name: string
+  revenue: number
+  orders: number
+}
+
+export interface DiscountKpis {
+  productsWithDiscount: { value: number; trend: TrendData }
+  averageDiscount: { value: number; trend: TrendData }
+  maxDiscount: { value: number; trend: TrendData }
+  totalSavingsAmount: { value: number; trend: TrendData }
+}
+
+export interface CustomerKpis {
+  totalUsers: { value: number; trend: TrendData }
+  usersActive: { value: number; trend: TrendData }
+  newCustomers: { value: number; trend: TrendData }
+}
+
+export interface OrderKpis {
+  totalOrders: { value: number; trend: TrendData }
+  totalProducts: { value: number; trend: TrendData }
+  avgValue: { value: number; trend: TrendData }
+  usersWithOrders: { value: number; trend: TrendData }
+}
+
+export interface CategoryStat {
+  name: string
+  count: number
+  avgDiscount: number
+  featuredImage: string
+}
+
+export interface Stats {
+  categoryStats: CategoryStat[]
+  totalSales: number
   productsSold: number
   totalDiscounts: number
+  usersWithOrders: number
   allStatus: string[]
+}
+
+export interface DashboardKpis {
+  totalSales: { value: number; trend: TrendData }
+  totalUsers: { value: number; trend: TrendData }
+  totalOrders: { value: number; trend: TrendData }
+  avgCartValue: { value: number; trend: TrendData }
+}
+
+export interface CategoryKpis {
+  totalCategories: { value: number; trend: TrendData }
+  averageDiscount: { value: number; trend: TrendData }
+  highStock: {
+    name: string
+    total: number
+    trend: TrendData
+  }
+  lowStock: {
+    name: string
+    total: number
+    trend: TrendData
+  }
+}
+
+export interface ProductKpis {
+  totalProducts: { value: number; trend: TrendData }
+  lowStock: { value: number; trend: TrendData }
+  totalCategories: { value: number; trend: TrendData }
 }
 
 export interface Activity {
@@ -168,4 +261,25 @@ export interface Activity {
   iconColor: string
   text: string
   time: string
+}
+
+export interface TrendData {
+  change: string
+  changeType: "positive" | "negative"
+  trend: "up" | "down"
+}
+
+export interface CategoryDetail {
+  name: string
+  stats: CategoryStats
+  topProducts: Product[]
+  lowStockAlerts: Product[]
+}
+
+export interface CategoryStats {
+  revenue: number
+  itemsSold: number
+  totalStock: number
+  inventoryValue: number
+  avgPrice: string // Viene como string según tu JSON ("29.18")
 }

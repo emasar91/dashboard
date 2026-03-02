@@ -1,99 +1,116 @@
 "use client"
 
-import { useQuery } from "@tanstack/react-query"
-import { getDashboardData } from "@/services/dashboardData"
 import { formatCurrency } from "@/lib/formatCurrency"
 import { useLocale, useTranslations } from "next-intl"
-import LoadingData from "./LoadingData"
+import { Cart } from "@/types/dashboard"
+import { Column, TableCustom } from "./Table"
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
+import { truncateText } from "@/lib/truncateText"
+import { statusStyles } from "@/constant"
 
-const statusStyles: Record<string, string> = {
-  Delivered: "bg-emerald-500/10 text-emerald-500",
-  Shipped: "bg-blue-500/10 text-blue-500",
-  Processing: "bg-amber-500/10 text-amber-500",
-  Cancelled: "bg-rose-500/10 text-rose-500",
+interface OrdersTableProps {
+  data: Cart[]
 }
 
-export function OrdersTable() {
-  const locale = useLocale()
-  const { data: dashboardData, isLoading } = useQuery({
-    queryKey: ["dashboard-data"],
-    queryFn: getDashboardData,
-  })
-
+export function OrdersTable({ data }: OrdersTableProps) {
   const t = useTranslations("ordersTable")
-  const orders = dashboardData?.carts || []
+  const locale = useLocale()
+  const orders = data
 
-  if (isLoading) {
-    return <LoadingData title={t("loading")} />
-  }
+  const ordersColumns: Column<Cart>[] = [
+    {
+      accessorKey: "id",
+      header: t("id"),
+      align: "text-center",
+      width: "w-[40px]",
+      cell: (item: Cart) => <span>{item.id}</span>,
+    },
+    {
+      accessorKey: "customerName",
+      header: t("customerName"),
+      align: "text-left",
+      width: "w-[120px]",
+      cell: (item: Cart) => (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className="capitalize max-w-[200px]!">
+              {truncateText(item.customerName, 30)}
+            </span>
+          </TooltipTrigger>
+          {item.customerName.length > 30 && (
+            <TooltipContent side="right">
+              <p>{item.customerName}</p>
+            </TooltipContent>
+          )}
+        </Tooltip>
+      ),
+    },
+    {
+      accessorKey: "products",
+      header: t("products"),
+      align: "text-left",
+      width: "w-[240px]",
+      cell: (item: Cart) => (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className="capitalize max-w-[200px]!">
+              {truncateText(item.products[0]?.title, 25)}
+              {item.products.length > 1 && (
+                <span className="text-[9px] ml-1">
+                  (+{item.products.length - 1})
+                </span>
+              )}
+            </span>
+          </TooltipTrigger>
+          {item.products.length > 1 && (
+            <TooltipContent side="right" className="max-w-2xs">
+              <p>{item.products.map((product) => product.title).join(", ")}</p>
+            </TooltipContent>
+          )}
+        </Tooltip>
+      ),
+    },
+    {
+      accessorKey: "total",
+      header: t("total"),
+      align: "text-center",
+      width: "w-[100px]",
+      cell: (item: Cart) => <span>{formatCurrency(item.total, locale)}</span>,
+    },
+    {
+      accessorKey: "status",
+      header: t("status.title"),
+      align: "text-center",
+      width: "w-[85px]",
+      cell: (item: Cart) => (
+        <span
+          className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium ${statusStyles[item.status.toLowerCase() as keyof typeof statusStyles]}`}
+        >
+          {item.status}
+        </span>
+      ),
+    },
+  ]
 
   return (
-    <div className="flex h-full flex-col rounded-xl border border-border bg-card p-4 lg:p-5">
-      <div className="mb-4">
+    <div className="flex h-full flex-col rounded-xl border border-border bg-card ">
+      <div className="p-4 lg:p-5">
         <h3 className="text-sm font-semibold text-card-foreground">
           {t("title")}
         </h3>
         <p className="text-xs text-muted-foreground">{t("subtitle")}</p>
       </div>
 
-      <div className="flex-1 overflow-auto -mx-4 lg:-mx-5">
-        <table className="w-full min-w-[450px]">
-          <thead>
-            <tr className="border-b border-border text-left">
-              <th className="px-2  pb-2 text-[10px] font-medium uppercase text-muted-foreground">
-                {t("orderId")}
-              </th>
-              <th className="pb-2 text-[10px] font-medium uppercase text-muted-foreground">
-                {t("customer")}
-              </th>
-              <th className="pb-2 text-[10px] font-medium uppercase text-muted-foreground">
-                {t("product")}
-              </th>
-              <th className="pb-2 text-right text-[10px] font-medium uppercase text-muted-foreground">
-                {t("amount")}
-              </th>
-              <th className="px-3 pb-2 text-right text-[10px] font-medium uppercase text-muted-foreground">
-                {t("status.title")}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.slice(0, 10).map((cart) => {
-              return (
-                <tr
-                  key={cart.id}
-                  className="border-b border-border/50 transition-colors last:border-0 hover:bg-secondary/30"
-                >
-                  <td className="px-2  py-2.5 text-xs font-mono font-medium text-card-foreground">
-                    #{cart.id}
-                  </td>
-                  <td className="py-2.5 text-xs text-muted-foreground">
-                    {cart.customerName}
-                  </td>
-                  <td className="py-2.5 text-xs text-muted-foreground truncate max-w-[150px]">
-                    {cart.products[0]?.title}
-                    {cart.products.length > 1 && (
-                      <span className="text-[9px] ml-1">
-                        (+{cart.products.length - 1})
-                      </span>
-                    )}
-                  </td>
-                  <td className="py-2.5 text-right text-xs font-medium text-card-foreground">
-                    {formatCurrency(cart.total, locale)}
-                  </td>
-                  <td className="px-2 py-2.5 text-right">
-                    <span
-                      className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium ${statusStyles[cart.status]}`}
-                    >
-                      {t(`status.${cart.status.toLowerCase()}`)}
-                    </span>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
+      <TableCustom
+        data={orders}
+        columns={ordersColumns}
+        emptyMessage={""}
+        currentPage={1}
+        onPageChange={() => {}}
+        onRowClick={() => {}}
+        pagination={false}
+        initialPageSize={12}
+      />
     </div>
   )
 }

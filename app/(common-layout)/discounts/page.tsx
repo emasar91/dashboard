@@ -11,7 +11,7 @@ import {
   PackageCheck,
   PackageMinus,
 } from "lucide-react"
-import { getTranslations } from "next-intl/server"
+import { getLocale, getTranslations } from "next-intl/server"
 
 const LazyPieChartCustom = dynamic(() =>
   import("@/components/PieChart").then((m) => m.PieChartCustom),
@@ -26,56 +26,23 @@ interface DiscountsPageProps {
 async function DiscountsPage({ searchParams }: DiscountsPageProps) {
   const queryClient = new QueryClient()
   const t = await getTranslations("discounts")
+  const locale = await getLocale()
 
   // Hacemos prefetch para que React Query ya tenga los datos al renderizar
   await queryClient.prefetchQuery({
     queryKey: ["dashboard-data"],
-    queryFn: getDashboardData,
+    queryFn: () => getDashboardData(locale),
   })
 
-  const data = await getDashboardData()
+  const data = await getDashboardData(locale)
   const params = await searchParams
+
+  const { discountKpis, allProducts, allCategories } = data
 
   const selectedDiscountId = params?.discountId
   const selectedDiscount =
-    data.allProducts.find((c) => c.id.toString() === selectedDiscountId) ||
-    data.allProducts[0] // Por defecto el primero o null
-
-  const stats = data.allProducts.reduce(
-    (acc, p) => {
-      // 1. Cantidad de productos que tienen algún descuento
-      const hasDiscount = p.discountPercentage > 0
-      if (hasDiscount) {
-        acc.productsWithDiscount += 1
-      }
-
-      // 2. Suma de porcentajes para el promedio
-      acc.totalPercentageSum += p.discountPercentage
-
-      // 3. Buscar el mayor descuento activo
-      if (p.discountPercentage > acc.maxDiscount) {
-        acc.maxDiscount = p.discountPercentage
-      }
-
-      // 4. Cantidad total de dinero descontado (Ahorro total)
-      // Fórmula: (Precio * Porcentaje) / 100
-      const amountSaved = (Number(p.price) * p.discountPercentage) / 100
-      acc.totalSavingsAmount += amountSaved
-
-      return acc
-    },
-    {
-      productsWithDiscount: 0,
-      totalPercentageSum: 0,
-      maxDiscount: 0,
-      totalSavingsAmount: 0,
-    },
-  )
-
-  // Cálculos finales fuera del loop
-  const totalProducts = data.allProducts.length
-  const averageDiscount =
-    totalProducts > 0 ? stats.totalPercentageSum / totalProducts : 0
+    allProducts.find((c) => c.id.toString() === selectedDiscountId) ||
+    allProducts[0] // Por defecto el primero o null
 
   const discountAmount =
     (selectedDiscount.price * selectedDiscount.discountPercentage) / 100
@@ -97,54 +64,51 @@ async function DiscountsPage({ searchParams }: DiscountsPageProps) {
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 md:gap-4">
         <StatCard
           title="productsWithDiscount"
-          value={stats.productsWithDiscount}
-          change="+7.8%"
-          changeType="positive"
+          value={discountKpis.productsWithDiscount.value}
+          change={discountKpis.productsWithDiscount.trend.change}
+          changeType={discountKpis.productsWithDiscount.trend.changeType}
           icon={PackageMinus}
           type="number"
           since="since"
-          trend="up"
+          trend={discountKpis.productsWithDiscount.trend.trend}
           intl="discounts.statsDiscounts"
         />
         <StatCard
           title="averageDiscount"
-          value={averageDiscount}
-          change="+22.1%"
-          changeType="positive"
+          value={discountKpis.averageDiscount.value}
+          change={discountKpis.averageDiscount.trend.change}
+          changeType={discountKpis.averageDiscount.trend.changeType}
           icon={CirclePercent}
           type="percentage"
           since="since"
-          trend="up"
+          trend={discountKpis.averageDiscount.trend.trend}
           intl="discounts.statsDiscounts"
         />
         <StatCard
           title="maxDiscount"
-          value={stats.maxDiscount}
-          change="+3.1%"
-          changeType="negative"
+          value={discountKpis.maxDiscount.value}
+          change={discountKpis.maxDiscount.trend.change}
+          changeType={discountKpis.maxDiscount.trend.changeType}
           icon={PackageCheck}
           type="percentage"
           since="since"
-          trend="down"
+          trend={discountKpis.maxDiscount.trend.trend}
           intl="discounts.statsDiscounts"
         />
         <StatCard
           title="totalSavingsAmount"
-          value={stats.totalSavingsAmount}
-          change="+3.1%"
-          changeType="negative"
+          value={discountKpis.totalSavingsAmount.value}
+          change={discountKpis.totalSavingsAmount.trend.change}
+          changeType={discountKpis.totalSavingsAmount.trend.changeType}
           icon={BanknoteX}
           type="currency"
           since="since"
-          trend="down"
+          trend={discountKpis.totalSavingsAmount.trend.trend}
           intl="discounts.statsDiscounts"
         />
       </div>
       <div>
-        <DiscountList
-          products={data.allProducts}
-          categories={data.allCategories}
-        />
+        <DiscountList products={allProducts} categories={allCategories} />
       </div>
       <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4  ">
         <div className="col-span-1 sm:col-span-2 lg:col-span-1 w-full">

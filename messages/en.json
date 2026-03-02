@@ -16,7 +16,31 @@
   },
   "dashboard": {
     "title": "Dashboard",
-    "subtitle": "Business overview"
+    "subtitle": "Summary of your business",
+    "primaryLabel": "Revenue",
+    "secondaryLabel": "Orders",
+    "chart": {
+      "title": "Revenue Distribution",
+      "subtitle": "By category (Top 5)",
+      "textCenter": "Revenue by category",
+      "revenue": "Revenue",
+      "orders": "Orders"
+    },
+    "recentActivity": {
+      "title": "Recent Activity",
+      "subtitle": "Latest updates",
+      "loading": "Loading activity...",
+      "paymentReceived": "Payment received from {name} for {amount}",
+      "newOrder": "New order from {name} for {amount}",
+      "newReview": "{name} left a review of {rating} stars",
+      "newCustomer": "New customer registered: {name}",
+      "orderShipped": "Order from {name} shipped",
+      "orderDelivered": "Order from {name} delivered",
+      "orderCancelled": "Order from {name} cancelled",
+      "orderProcessing": "Order from {name} processing",
+      "justNow": "Just now",
+      "minutesAgo": "{count}m"
+    }
   },
   "stats": {
     "totalSales": "Total Sales",
@@ -26,18 +50,18 @@
     "since": "Since last month"
   },
   "revenueChart": {
-    "title": "Revenue Overview",
+    "title": "Revenue Summary",
     "subtitle": "Monthly Revenue & Orders",
     "loading": "Loading revenue...",
     "month": {
       "jan": "Jan",
       "feb": "Feb",
       "mar": "Mar",
-      "apr": "Apr",
+      "apr": "Abr",
       "may": "May",
       "jun": "Jun",
       "jul": "Jul",
-      "aug": "Aug",
+      "aug": "Ago",
       "sep": "Sep",
       "oct": "Oct",
       "nov": "Nov",
@@ -53,17 +77,17 @@
   },
   "categoryCard": {
     "title": "Top Selling Categories",
-    "subtitle": "Revenue distribution",
+    "subtitle": "Revenue Distribution",
     "loading": "Loading categories..."
   },
   "ordersTable": {
     "title": "Recent Orders",
     "subtitle": "Latest orders placed",
     "loading": "Loading orders...",
-    "orderId": "ID",
-    "customer": "Customer",
-    "product": "Product",
-    "amount": "Amount",
+    "id": "ID",
+    "customerName": "Customer",
+    "products": "Products",
+    "total": "Total",
     "status": {
       "title": "Status",
       "shipped": "Shipped",
@@ -74,35 +98,20 @@
   },
   "discountsCard": {
     "title": "Best Deals",
-    "subtitle": "Greatest discounts available",
-    "loading": "Loading deals...",
+    "subtitle": "Top discounts available",
+    "loading": "Loading discounts...",
     "stock": "Stock"
-  },
-  "activityCard": {
-    "title": "Recent Activity",
-    "subtitle": "Latest updates",
-    "loading": "Loading activity...",
-    "paymentReceived": "Payment received from {name} for {amount}",
-    "newOrder": "New order from {name} for {amount}",
-    "newReview": "{name} left a {rating} star review",
-    "newCustomer": "New customer registered: {name}",
-    "orderShipped": "Order for {name} shipped",
-    "orderDelivered": "Order for {name} delivered",
-    "orderCancelled": "Order for {name} cancelled",
-    "orderProcessing": "Order for {name} processing",
-    "justNow": "Just now",
-    "minutesAgo": "{count}m"
   },
   "products": {
     "title": "Products",
-    "subtitle": "Product list",
+    "subtitle": "List of products",
     "searchPlaceholder": "By name or SKU",
     "searchTitle": "Search products",
     "emptyMessage": "No products found.",
     "filter": {
       "title": "Filter",
       "placeholder": "By category",
-      "all": "All"
+      "all": "Clear filters"
     },
     "table": {
       "image": "Image",
@@ -132,17 +141,18 @@
   },
   "orders": {
     "title": "Orders",
-    "subtitle": "Order list",
+    "subtitle": "List of orders",
     "searchPlaceholder": "By customer or order ID",
     "searchTitle": "Search orders",
     "emptyMessage": "No orders found.",
-    "itemsList": "Product list",
+    "itemsList": "List of products",
     "total": "Total",
     "idOrder": "Order ID",
     "netSales": "Total Sales",
     "discounts": "Discounts",
     "titleChart": "Revenue vs Discounts",
     "subtitleChart": "Impact of promotions on gross total",
+    "textCenter": "Revenue without discounts",
     "statsOrders": {
       "totalOrders": "Total Orders",
       "totalProducts": "Products Sold",
@@ -153,14 +163,14 @@
     "filter": {
       "title": "Filter",
       "placeholder": "By status",
-      "all": "All"
+      "all": "Clear filters"
     },
     "table": {
       "id": "ID",
       "userId": "User",
-      "customerName": "Customer Name",
+      "customerName": "Customer",
       "customerEmail": "Email",
-      "items": "Items",
+      "items": "Products",
       "total": "Total",
       "status": {
         "title": "Status",
@@ -173,7 +183,7 @@
   },
   "customers": {
     "title": "Customers",
-    "subtitle": "Customer list",
+    "subtitle": "List of customers",
     "searchPlaceholder": "By name, email or Id",
     "searchTitle": "Search customers",
     "emptyMessage": "No customers found.",
@@ -193,7 +203,7 @@
       "id": "ID",
       "customer": "Customer",
       "contact": "Contact",
-      "info": "Info",
+      "info": "Information",
       "location": "Location",
       "role": {
         "title": "Role",
@@ -233,7 +243,7 @@
   },
   "discounts": {
     "title": "Discounts",
-    "subtitle": "Discount list",
+    "subtitle": "List of discounts",
     "chart": {
       "finalPrice": "Final Price",
       "discountAmount": "Savings",
@@ -248,7 +258,7 @@
       "productsWithDiscount": "Products with Discount",
       "averageDiscount": "Average Discount",
       "maxDiscount": "Max Discount",
-      "totalSavingsAmount": "Total Savings",
+      "totalSavingsAmount": "Loss due to Discounts",
       "since": "Since last month"
     },
     "filter": {
@@ -307,6 +317,73 @@
         "title": "Logistics",
         "shipping": "Shipping",
         "returnPolicy": "Return Policy"
+      }
+    }
+  },
+  "categories": {
+    "title": "Categories",
+    "subtitle": "Category grid",
+    "searchPlaceholder": "By name or Id",
+    "searchTitle": "Search categories",
+    "emptyMessage": "No categories found.",
+    "productCount": "Items",
+    "avgDiscount": "Avg Discount: {discount}%",
+    "chart": {
+      "title": "Revenue by Category",
+      "subtitle": "Revenue by Category",
+      "primaryLabel": "Revenue",
+      "secondaryLabel": "Orders",
+      "revenue": "Revenue",
+      "orders": "Orders"
+    },
+    "statsCategories": {
+      "totalCategories": "Total Categories",
+      "categoryHighStock": "High Stock Category (Max Stock)",
+      "categoryLowStock": "Low Stock Category (Min Stock)",
+      "averageDiscount": "Average Discount",
+      "currentInventory": "Current Inventory (Units)",
+      "since": "Since last month"
+    },
+    "filter": {
+      "title": "Filter",
+      "category": "By category",
+      "rangeDiscount": {
+        "title": "By discount range",
+        "low": "Up to 10%",
+        "mid": "From 10% to 30%",
+        "high": "More than 30%"
+      },
+      "stock": {
+        "title": "By stock",
+        "empty": "No Stock",
+        "low": "Low Stock (1-20)",
+        "ok": "Sufficient (21-50)",
+        "high": "Abundant (+50)"
+      },
+      "all": "Clear filters"
+    },
+    "table": {
+      "id": "ID",
+      "image": "Image",
+      "name": "Name",
+      "description": "Description",
+      "parent": "Parent Category",
+      "slug": "Slug"
+    },
+    "categoryDetail": {
+      "title": "Category Detail",
+      "subtitle": "Complete category information",
+      "stock": "Units in Stock",
+      "lowStockAlerts": "Critical Stock Alerts",
+      "topProducts": "Top Products (Top 5)",
+      "close": "Close Detail",
+      "lowStock": "Only {stock} left",
+      "outOfStock": "Out of Stock",
+      "stats": {
+        "revenue": "Revenue",
+        "sold": "Sold",
+        "inventoryValue": "Inventory Value",
+        "priceAvg": "Avg Price"
       }
     }
   }

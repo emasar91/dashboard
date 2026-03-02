@@ -4,11 +4,13 @@ import { getLocale, getTranslations } from "next-intl/server"
 
 interface StatCardProps {
   title: string
-  value: number
+  // Cambiamos value para que soporte string (nombre de categoría) o number
+  value: number | string
   change: string
   changeType: "positive" | "negative"
   icon: LucideIcon
-  type: "currency" | "number" | "percentage"
+  // Añadimos "string" a los tipos posibles
+  type: "currency" | "number" | "percentage" | "string"
   since: string
   trend: "up" | "down"
   intl: string
@@ -28,26 +30,43 @@ export async function StatCard({
   const locale = await getLocale()
   const t = await getTranslations(intl)
 
+  // Función auxiliar para renderizar el valor según el tipo
+  const renderValue = () => {
+    if (type === "string") {
+      return (
+        <span className="capitalize text-lg font-bold tracking-tight text-card-foreground lg:text-xl">
+          {String(value).replaceAll("-", " ")}
+        </span>
+      )
+    }
+
+    if (typeof value === "number") {
+      if (type === "currency") return formatCurrency(value, locale)
+      if (type === "percentage") return `${value.toFixed(2)}%`
+      return value
+    }
+
+    return value // Fallback
+  }
+
   return (
-    <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 lg:p-3 transition-all duration-200 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
+    <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 lg:p-3 transition-all duration-200 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 flex flex-col justify-between">
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
             {t(title)}
           </p>
           <p className="text-2xl font-bold tracking-tight text-card-foreground lg:text-3xl">
-            {type === "currency"
-              ? formatCurrency(value, locale)
-              : type === "percentage"
-                ? `${value.toFixed(2)}%`
-                : value}
+            {renderValue()}
           </p>
         </div>
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary lg:h-10 lg:w-10">
           <Icon className="h-4 w-4 lg:h-5 lg:w-5" />
         </div>
       </div>
-      <div className="mt-3 flex items-center gap-1.5">
+
+      {/* Sección inferior: cambio y temporalidad */}
+      <div className="mt-3 flex items-center gap-1.5 ">
         <span
           className={`inline-flex items-center rounded-md px-1.5 py-0.5 text-xs font-semibold gap-1 ${
             changeType === "positive"
@@ -64,7 +83,6 @@ export async function StatCard({
         </span>
         <span className="text-xs text-muted-foreground">{t(since)}</span>
       </div>
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-linear-to-r from-transparent via-primary/40 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
     </div>
   )
 }

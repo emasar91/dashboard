@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios"
 import { api } from "@/lib/api-client"
 import {
   Cart,
@@ -8,9 +9,16 @@ import {
   CartProduct,
   User,
   Activity,
+  Product,
+  TrendData,
+  CategoryDetail,
 } from "@/types/dashboard"
+import { categoriesEs, monthsEn, monthsEs, statusEs } from "@/constant"
 
-export async function getDashboardData(): Promise<DashboardData> {
+export async function getDashboardData(
+  locale?: string,
+  t?: (key: string, values?: Record<string, string | number>) => string,
+): Promise<DashboardData> {
   const [cartsRes, usersRes, discountProductsRes, allProductsRes] =
     await Promise.all([
       api.get<CartsResponse>("/carts"),
@@ -24,7 +32,12 @@ export async function getDashboardData(): Promise<DashboardData> {
       api.get<ProductsResponse>("/products?limit=0"),
     ])
 
-  const allProducts = allProductsRes.data.products
+  const allProducts = allProductsRes.data.products.map((p) => {
+    return {
+      ...p,
+      category: locale === "es" ? categoriesEs[p.category] : p.category,
+    }
+  })
   const carts = cartsRes.data.carts
 
   // 1. Creación de Mapas (Lookups) para rendimiento O(1)
@@ -52,7 +65,10 @@ export async function getDashboardData(): Promise<DashboardData> {
       category: categoryLookup[prod.id] || "Other",
     })),
     // Asignamos un estado aleatorio pero consistente basado en el ID
-    status: ["Shipped", "Processing", "Cancelled", "Delivered"][cart.id % 4],
+    status:
+      locale === "es"
+        ? statusEs[cart.id % 4]
+        : ["Shipped", "Processing", "Cancelled", "Delivered"][cart.id % 4],
   }))
 
   // 3. Cálculos Financieros Corregidos
@@ -76,51 +92,67 @@ export async function getDashboardData(): Promise<DashboardData> {
     ),
   )
 
+  const usersWithOrders = new Set(carts.map((cart) => cart.userId)).size
+
+  const allCategories = [...new Set(allProducts.map((p) => p.category))]
+
+  const categoryStats = allCategories.map((cat) => {
+    const productsInCat = allProducts.filter((p) => p.category === cat)
+    const avgDiscount =
+      productsInCat.reduce((acc, p) => acc + p.discountPercentage, 0) /
+      productsInCat.length
+
+    return {
+      name: cat,
+      count: productsInCat.length,
+      avgDiscount: Math.round(avgDiscount),
+      featuredImage: productsInCat[0]?.thumbnail, // Usamos el primer producto como portada
+    }
+  })
+
   return {
-    totalSales,
-    totalUsers: usersRes.data.total,
-    totalOrders: cartsRes.data.total,
-    avgCartValue: totalSales / cartsRes.data.total, // Ticket promedio real
-
     carts: cartsWithData,
-    productsSold: carts.reduce(
-      (acc: number, c: Cart) => acc + c.totalQuantity,
-      0,
-    ),
-    totalDiscounts: totalDiscountCash,
-
-    // Conteo real de clientes únicos con pedidos
-    usersWithOrders: new Set(carts.map((cart) => cart.userId)).size,
-    allStatus,
     users: usersRes.data.users,
-    discounts: discountProductsRes.data.products,
     allProducts,
-    allCategories: [...new Set(allProducts.map((p) => p.category))],
-    lowStockProducts: allProducts.filter((p) => p.stock < 10),
+    allCategories,
+    stats: {
+      categoryStats,
+      totalSales,
+      productsSold: carts.reduce(
+        (acc: number, c: Cart) => acc + c.totalQuantity,
+        0,
+      ),
+      totalDiscounts: totalDiscountCash,
+      usersWithOrders,
+      allStatus,
+    },
+    topSellingProducts: getTopSellingProducts(cartsWithData),
 
-    // Datos listos para la gráfica de distribución
-    // categoryRevenue: categoryStats,
+    categoryKpis: getCategoryKpis(allProducts),
+    productKpis: getProductKpis(allProducts, allCategories),
+    dashboardKpis: getDashboardKpis(usersRes, cartsRes, totalSales),
+    orderKpis: getOrdersKpis(carts, usersWithOrders),
+    customerKpis: getCustomerKpis(carts, usersRes),
+    discountKpis: getDiscountKpis(allProducts),
+    revenueByMonthChart: getRevenueByMonthChartData(cartsWithData, locale),
+    categoriesAreaChart: getCategoryChartData(cartsWithData),
+    categoriesPieChart: getCategoryPieData(cartsWithData),
+    recentActivity: getRecentActivity(cartsWithData, usersRes.data.users, t),
+    discountsData: discountProductsRes.data.products,
+    recentsOrders: cartsWithData.slice(0, 15),
+    categoryDetails: getCategoryDetails(
+      allProducts,
+      allCategories,
+      cartsWithData,
+    ),
   }
 }
 
-export const transformCartData = (
+export const getRevenueByMonthChartData = (
   carts: Cart[],
-  t: (key: string, values?: Record<string, string | number>) => string,
+  locale: string | undefined,
 ) => {
-  const months = [
-    t("month.jan"),
-    t("month.feb"),
-    t("month.mar"),
-    t("month.apr"),
-    t("month.may"),
-    t("month.jun"),
-    t("month.jul"),
-    t("month.aug"),
-    t("month.sep"),
-    t("month.oct"),
-    t("month.nov"),
-    t("month.dec"),
-  ]
+  const months = locale === "es" ? monthsEs : monthsEn
   const groupedData = []
 
   // Recorremos los meses
@@ -180,7 +212,7 @@ export const getTopSellingProducts = (carts: Cart[]) => {
   // Convertimos a array, ordenamos por ventas y tomamos los top 5
   return Object.values(productMap)
     .sort((a, b) => b.sales - a.sales)
-    .slice(0, 5)
+    .slice(0, 7)
     .map((p) => ({
       name: p.name,
       sales: p.sales,
@@ -212,7 +244,7 @@ export const getCategoryData = (carts: Cart[]) => {
 export const getRecentActivity = (
   carts: Cart[],
   users: User[],
-  t: (key: string, values?: Record<string, string | number>) => string,
+  t?: (key: string, values?: Record<string, string | number>) => string,
 ) => {
   const activities: Activity[] = []
 
@@ -220,10 +252,12 @@ export const getRecentActivity = (
   carts.slice(0, 3).forEach((cart, i) => {
     activities.push({
       icon: "CreditCard",
-      text: t("paymentReceived", {
-        name: cart.customerName,
-        amount: `$${cart.total}`,
-      }),
+      text: t
+        ? t("paymentReceived", {
+            name: cart.customerName,
+            amount: `$${cart.total}`,
+          })
+        : `Payment received from ${cart.customerName}: $${cart.total}`,
       time: `${i * 15 + 2} min ago`,
       iconBg: "bg-emerald-500/10",
       iconColor: "text-emerald-500",
@@ -234,9 +268,11 @@ export const getRecentActivity = (
   users.slice(5, 7).forEach((user, i) => {
     activities.push({
       icon: "UserPlus",
-      text: t("newCustomer", {
-        name: `${user.firstName} ${user.lastName}`,
-      }),
+      text: t
+        ? t("newCustomer", {
+            name: `${user.firstName} ${user.lastName}`,
+          })
+        : `New customer: ${user.firstName} ${user.lastName}`,
       time: `${(i + 1) * 45} min ago`,
       iconBg: "bg-blue-500/10",
       iconColor: "text-blue-500",
@@ -247,10 +283,12 @@ export const getRecentActivity = (
   carts.slice(3, 5).forEach((cart, i) => {
     activities.push({
       icon: "Package",
-      text: t("orderShipped", {
-        name: cart.customerName,
-        amount: `$${cart.total}`,
-      }),
+      text: t
+        ? t("orderShipped", {
+            name: cart.customerName,
+            amount: `$${cart.total}`,
+          })
+        : `Order shipped for ${cart.customerName}: $${cart.total}`,
       time: `${i + 2} hr ago`,
       iconBg: "bg-amber-500/10",
       iconColor: "text-amber-500",
@@ -258,4 +296,356 @@ export const getRecentActivity = (
   })
 
   return activities.sort((a, b) => a.time.localeCompare(b.time)) // Un sort simple
+}
+
+export const getDashboardKpis = (
+  usersRes: AxiosResponse<UsersResponse>,
+  cartsRes: AxiosResponse<CartsResponse>,
+  totalSales: number,
+) => {
+  return {
+    totalSales: {
+      value: totalSales,
+      trend: calculateTrend(totalSales, "totalSales"),
+    },
+    totalUsers: {
+      value: usersRes.data.total,
+      trend: calculateTrend(usersRes.data.total, "totalUsers"),
+    },
+    totalOrders: {
+      value: cartsRes.data.total,
+      trend: calculateTrend(cartsRes.data.total, "totalOrders"),
+    },
+    avgCartValue: {
+      value: totalSales / cartsRes.data.total,
+      trend: calculateTrend(totalSales / cartsRes.data.total, "avgCartValue"),
+    },
+  }
+}
+
+export const getCategoryKpis = (allProducts: Product[]) => {
+  const categoryStats: Record<string, { count: number; stock: number }> = {}
+  let totalDiscountSum = 0
+
+  allProducts.forEach((p) => {
+    const categoryName = p.category
+    // 1. Agrupar por categoría para encontrar stock
+    if (!categoryStats[categoryName]) {
+      categoryStats[categoryName] = { count: 0, stock: 0 }
+    }
+    categoryStats[categoryName].count++
+    categoryStats[categoryName].stock += p.stock
+
+    // 2. Sumar descuentos para el promedio general
+    totalDiscountSum += p.discountPercentage
+  })
+
+  const categoriesArray = Object.entries(categoryStats)
+
+  // Encontrar categoría con más stock (High)
+  const highStock = categoriesArray.reduce((prev, curr) =>
+    curr[1].stock > prev[1].stock ? curr : prev,
+  )
+
+  // Encontrar categoría con menos stock (Low)
+  const lowStock = categoriesArray.reduce((prev, curr) =>
+    curr[1].stock < prev[1].stock ? curr : prev,
+  )
+
+  return {
+    totalCategories: {
+      value: categoriesArray.length,
+      trend: calculateTrend(categoriesArray.length, "totalCategories"),
+    },
+    averageDiscount: {
+      value: totalDiscountSum / allProducts.length,
+      trend: calculateTrend(
+        totalDiscountSum / allProducts.length,
+        "averageDiscount",
+      ),
+    },
+    highStock: {
+      name: highStock[0],
+      total: highStock[1].stock,
+      trend: calculateTrend(highStock[1].stock, "highStock"),
+    },
+    lowStock: {
+      name: lowStock[0],
+      total: lowStock[1].stock,
+      trend: calculateTrend(lowStock[1].stock, "lowStock"),
+    },
+  }
+}
+
+export const getProductKpis = (
+  allProducts: Product[],
+  allCategories: string[],
+) => {
+  return {
+    totalProducts: {
+      value: allProducts.length,
+      trend: calculateTrend(allProducts.length, "totalProducts"),
+    },
+    lowStock: {
+      value: allProducts.filter((p) => p.stock < 10).length,
+      trend: calculateTrend(
+        allProducts.filter((p) => p.stock < 10).length,
+        "lowStock",
+      ),
+    },
+    totalCategories: {
+      value: allCategories.length,
+      trend: calculateTrend(allCategories.length, "totalCategories"),
+    },
+  }
+}
+
+export const getOrdersKpis = (carts: Cart[], usersWithOrders: number) => {
+  return {
+    totalOrders: {
+      value: carts.length,
+      trend: calculateTrend(carts.length, "totalOrders"),
+    },
+    totalProducts: {
+      value: carts.reduce((acc: number, c: Cart) => acc + c.totalQuantity, 0),
+      trend: calculateTrend(
+        carts.reduce((acc: number, c: Cart) => acc + c.totalQuantity, 0),
+        "totalProducts",
+      ),
+    },
+    avgValue: {
+      value: carts.reduce((acc, cart) => acc + cart.total, 0) / carts.length,
+      trend: calculateTrend(
+        carts.reduce((acc, cart) => acc + cart.total, 0) / carts.length,
+        "avgValue",
+      ),
+    },
+    usersWithOrders: {
+      value: usersWithOrders,
+      trend: calculateTrend(usersWithOrders, "usersWithOrders"),
+    },
+  }
+}
+
+export const getCustomerKpis = (
+  carts: Cart[],
+  usersRes: AxiosResponse<UsersResponse>,
+) => {
+  return {
+    totalUsers: {
+      value: usersRes.data.total,
+      trend: calculateTrend(usersRes.data.total, "totalUsers"),
+    },
+    usersActive: {
+      value: carts.length,
+      trend: calculateTrend(carts.length, "usersActive"),
+    },
+    newCustomers: {
+      value: usersRes.data.total / 4,
+      trend: calculateTrend(usersRes.data.total / 4, "newCustomers"),
+    },
+  }
+}
+
+export const getDiscountKpis = (allProducts: Product[]) => {
+  const stats = allProducts.reduce(
+    (acc, p) => {
+      // 1. Cantidad de productos que tienen algún descuento
+      const hasDiscount = p.discountPercentage > 0
+      if (hasDiscount) {
+        acc.productsWithDiscount += 1
+      }
+
+      // 2. Suma de porcentajes para el promedio
+      acc.totalPercentageSum += p.discountPercentage
+
+      // 3. Buscar el mayor descuento activo
+      if (p.discountPercentage > acc.maxDiscount) {
+        acc.maxDiscount = p.discountPercentage
+      }
+
+      // 4. Cantidad total de dinero descontado (Ahorro total)
+      // Fórmula: (Precio * Porcentaje) / 100
+      const amountSaved = (Number(p.price) * p.discountPercentage) / 100
+      acc.totalSavingsAmount += amountSaved
+
+      return acc
+    },
+    {
+      productsWithDiscount: 0,
+      totalPercentageSum: 0,
+      maxDiscount: 0,
+      totalSavingsAmount: 0,
+    },
+  )
+
+  // Cálculos finales fuera del loop
+  const totalProducts = allProducts.length
+  const averageDiscount =
+    totalProducts > 0 ? stats.totalPercentageSum / totalProducts : 0
+
+  return {
+    productsWithDiscount: {
+      value: stats.productsWithDiscount,
+      trend: calculateTrend(stats.productsWithDiscount, "productsWithDiscount"),
+    },
+    averageDiscount: {
+      value: averageDiscount,
+      trend: calculateTrend(averageDiscount, "averageDiscount"),
+    },
+    maxDiscount: {
+      value: stats.maxDiscount,
+      trend: calculateTrend(stats.maxDiscount, "maxDiscount"),
+    },
+    totalSavingsAmount: {
+      value: stats.totalSavingsAmount,
+      trend: calculateTrend(stats.totalSavingsAmount, "totalSavingsAmount"),
+    },
+  }
+}
+
+export const getCategoryChartData = (carts: Cart[]) => {
+  const categoryMap: Record<
+    string,
+    { name: string; revenue: number; orders: number }
+  > = {}
+
+  carts.forEach((cart) => {
+    cart.products.forEach((product) => {
+      const catName = product.category
+
+      if (!categoryMap[catName]) {
+        categoryMap[catName] = {
+          name: catName,
+          revenue: 0,
+          orders: 0,
+        }
+      }
+
+      // Sumamos el total de dinero y la cantidad de unidades vendidas
+      categoryMap[catName].revenue += product.total
+      categoryMap[catName].orders += product.quantity
+    })
+  })
+
+  // Convertimos el mapa a un array y lo ordenamos por ingresos (revenue) de mayor a menor
+  // Opcional: .slice(0, 8) para no saturar el gráfico si hay demasiadas categorías
+  return Object.values(categoryMap)
+    .sort((a, b) => b.revenue - a.revenue)
+    .map((cat) => ({
+      ...cat,
+      // Redondeamos el revenue para evitar decimales infinitos en el gráfico
+      revenue: Number(cat.revenue.toFixed(2)),
+    }))
+}
+
+export const getCategoryPieData = (carts: Cart[]) => {
+  const categoryMap: Record<
+    string,
+    { name: string; revenue: number; orders: number }
+  > = {}
+
+  carts.forEach((cart) => {
+    cart.products.forEach((product) => {
+      const catName = product.category
+
+      if (!categoryMap[catName]) {
+        categoryMap[catName] = {
+          name: catName,
+          revenue: 0,
+          orders: 0,
+        }
+      }
+
+      // Sumamos el total de dinero y la cantidad de unidades vendidas
+      categoryMap[catName].revenue += product.total
+      categoryMap[catName].orders += product.quantity
+    })
+  })
+
+  // Convertimos el mapa a un array y lo ordenamos por ingresos (revenue) de mayor a menor
+  // Opcional: .slice(0, 8) para no saturar el gráfico si hay demasiadas categorías
+  return Object.values(categoryMap)
+    .sort((a, b) => b.revenue - a.revenue)
+    .map((cat) => ({
+      name: cat.name.replaceAll("-", " "),
+      // Redondeamos el revenue para evitar decimales infinitos en el gráfico
+      value: Number(cat.revenue.toFixed(2)),
+    }))
+}
+
+export const calculateTrend = (current: number, seed: string): TrendData => {
+  // 1. Creamos una variación basada en la longitud del nombre o un código
+  // Esto genera un "ruido" entre 0.05 y 0.20 (5% y 20%)
+  const noise = (seed.length % 10) / 50 + 0.05
+
+  // 2. Determinamos si es positivo o negativo según la primera letra
+  const isPositive = seed.charCodeAt(0) % 2 === 0
+
+  const factor = isPositive ? 1 - noise : 1 + noise
+  const prevValue = current * factor
+
+  const diff = current - prevValue
+  const percentageValue = Math.abs((diff / prevValue) * 100)
+
+  return {
+    change: `${isPositive ? "+" : "-"}${percentageValue.toFixed(1)}%`,
+    changeType: isPositive ? "positive" : "negative",
+    trend: isPositive ? "up" : "down",
+  }
+}
+
+export const getCategoryDetails = (
+  allProducts: Product[],
+  allCategories: string[],
+  cartsWithData: Cart[],
+) => {
+  const categoryDetails = allCategories.reduce(
+    (acc, catName) => {
+      // 1. Filtrar productos de esta categoría
+      const productsInCategory = allProducts.filter(
+        (p) => p.category === catName,
+      )
+
+      // 2. Calcular stock total y valor del inventario
+      const totalStock = productsInCategory.reduce((sum, p) => sum + p.stock, 0)
+      const inventoryValue = productsInCategory.reduce(
+        (sum, p) => sum + p.price * p.stock,
+        0,
+      )
+
+      // 3. Ventas de la categoría (recorriendo los carritos enriquecidos)
+      let categoryRevenue = 0
+      let itemsSold = 0
+
+      cartsWithData.forEach((cart) => {
+        cart.products.forEach((p) => {
+          if (p.category === catName) {
+            categoryRevenue += p.total
+            itemsSold += p.quantity
+          }
+        })
+      })
+
+      acc[catName] = {
+        name: catName,
+        stats: {
+          revenue: categoryRevenue,
+          itemsSold,
+          totalStock,
+          inventoryValue,
+          avgPrice: (inventoryValue / (totalStock || 1)).toFixed(2),
+        },
+        topProducts: productsInCategory
+          .sort((a, b) => b.rating - a.rating) // O por ventas si tuvieras el dato
+          .slice(0, 5),
+        lowStockAlerts: productsInCategory.filter((p) => p.stock < 10),
+      }
+
+      return acc
+    },
+    {} as Record<string, CategoryDetail>,
+  )
+
+  return categoryDetails
 }

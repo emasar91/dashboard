@@ -111,7 +111,7 @@ export default function CustomersList({ users }: { users: User[] }) {
             alt={item.username}
             width={32}
             height={32}
-            className="rounded-full bg-slate-100"
+            className="h-12 w-12 rounded-lg object-cover bg-muted"
           />
           <div className="flex flex-col">
             <span className="font-medium text-sm leading-none">

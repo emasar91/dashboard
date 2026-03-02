@@ -85,7 +85,7 @@ export default function CustomerDetail({ user }: { user: User }) {
             alt={user.username}
             width={80} // Un poco más grande para que luzca mejor en móvil
             height={80}
-            className="rounded-full bg-slate-900 border-2 border-primary/20"
+            className="rounded-full bg-muted border-2 border-primary/20"
           />
           <Badge
             className={cn(

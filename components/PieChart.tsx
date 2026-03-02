@@ -11,6 +11,7 @@ import {
 } from "recharts"
 import { useLocale } from "next-intl"
 import { formatCurrency } from "@/lib/formatCurrency"
+import { truncateText } from "@/lib/truncateText"
 
 interface PieTooltipEntry {
   name: string
@@ -36,7 +37,9 @@ function CustomTooltip({
           className="h-2 w-2 rounded-full"
           style={{ backgroundColor: entry.payload.fill }}
         />
-        <span className="text-xs text-muted-foreground">{entry.name}</span>
+        <span className="text-xs text-muted-foreground capitalize">
+          {entry.name}
+        </span>
       </div>
       <p className="mt-1 text-sm font-semibold text-card-foreground">
         {formatCurrency(entry.value, locale)}
@@ -74,7 +77,7 @@ export function PieChartCustom({
   subtitle,
   className,
   showTooltip = true,
-  textCenter,
+  textCenter = "Total",
 }: PieChartProps) {
   const colors = useThemeColors()
   const locale = useLocale()
@@ -132,14 +135,11 @@ export function PieChartCustom({
                 <Label
                   position="center"
                   content={({ viewBox }) => {
-                    // Extraemos los datos que viste en el console.log
                     const { width, height, x, y } = viewBox as ViewBox
 
-                    // Calculamos el centro real sumando el offset (x, y)
-                    // a la mitad de las dimensiones
                     const centerX = (x || 0) + (width || 0) / 2
                     const centerY = (y || 0) + (height || 0) / 2
-
+                    const maxTextWidth = width * 0.1
                     return (
                       <g>
                         <text
@@ -158,9 +158,9 @@ export function PieChartCustom({
                           <tspan
                             x={centerX}
                             y={centerY + 15}
-                            className="fill-muted-foreground sm:text-[10px] text-[8px] uppercase tracking-wider font-medium"
+                            className={`fill-muted-foreground sm:text-[10px] text-[8px] uppercase tracking-wider font-medium w-fulltext`}
                           >
-                            {textCenter}
+                            {truncateText(textCenter, maxTextWidth)}
                           </tspan>
                         </text>
                       </g>
@@ -186,7 +186,7 @@ export function PieChartCustom({
                     backgroundColor: chartColors[i % chartColors.length],
                   }}
                 />
-                <span className="truncate text-[10px] text-muted-foreground italic">
+                <span className="truncate text-[10px] text-muted-foreground italic capitalize">
                   {item.name}
                 </span>
               </div>

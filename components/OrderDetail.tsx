@@ -9,11 +9,11 @@ import Image from "next/image"
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
 import { truncateText } from "@/lib/truncateText"
 
-interface CartDetailProps {
+interface OrderDetailProps {
   cart: Cart | null
 }
 
-const CartDetail = ({ cart }: CartDetailProps) => {
+const OrderDetail = ({ cart }: OrderDetailProps) => {
   const t = useTranslations("products")
   const t2 = useTranslations("orders")
   const locale = useLocale()
@@ -31,7 +31,7 @@ const CartDetail = ({ cart }: CartDetailProps) => {
             alt={item.title}
             width={50}
             height={50}
-            className="rounded"
+            className="h-12 w-12 rounded-lg object-cover bg-muted"
           />
         </div>
       ),
@@ -65,12 +65,12 @@ const CartDetail = ({ cart }: CartDetailProps) => {
         <Tooltip>
           <TooltipTrigger asChild>
             <span className="capitalize max-w-[200px]!">
-              {truncateText(item.category, 10)}
+              {truncateText(item.category.replaceAll("-", " "), 10)}
             </span>
           </TooltipTrigger>
           {item.category.length > 10 && (
             <TooltipContent side="right">
-              <p>{item.category}</p>
+              <p>{item.category.replaceAll("-", " ")}</p>
             </TooltipContent>
           )}
         </Tooltip>
@@ -112,7 +112,7 @@ const CartDetail = ({ cart }: CartDetailProps) => {
       <span
         className={`inline-flex rounded-full px-2 py-0.5 text-xs capitalize font-medium ${statusStyles[cart?.status.toLowerCase() as keyof typeof statusStyles]}`}
       >
-        {t2(`table.status.${cart?.status.toLowerCase()}`)}
+        {cart?.status}
       </span>
       <p className="text-xl font-medium tracking-wide text-muted-foreground mt-2">
         {t2("itemsList")}
@@ -128,4 +128,4 @@ const CartDetail = ({ cart }: CartDetailProps) => {
   )
 }
 
-export default CartDetail
+export default OrderDetail
