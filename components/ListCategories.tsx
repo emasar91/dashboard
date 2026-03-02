@@ -21,7 +21,6 @@ const ListCategories = ({
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] =
     useState<CategoryDetailType | null>(null)
-  console.log("🚀 ~ selectedCategory:", selectedCategory)
 
   const [selectedFilters, setSelectedFilters] = useState<
     Record<string, string[]>
