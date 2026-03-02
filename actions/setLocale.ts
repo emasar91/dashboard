@@ -9,8 +9,3 @@ export async function setLocale(locale: "es" | "en") {
     maxAge: 60 * 60 * 24 * 365, // 1 año
   })
 }
-
-export async function getLocale() {
-  const cookieStore = await cookies()
-  return cookieStore.get("NEXT_LOCALE")?.value || "en"
-}
