@@ -38,14 +38,11 @@ function CategoryDetailComponent({
 
   return (
     <Drawer open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      {/* Cambiado a 96vh para evitar que el teclado o barras de navegación lo corten */}
-      <DrawerContent className="max-h-[96vh]">
-        {/* ELIMINADO: overflow-hidden (previene el scroll)
-        MODIFICADO: h-full por h-[96vh] para que flex-1 tenga un punto de referencia 
-    */}
-        <div className="mx-auto w-full max-w-2xl flex flex-col max-h-[96vh]">
-          {/* Header con shrink-0: impide que el encabezado se aplaste */}
-          <DrawerHeader className="border-b border-border/50 shrink-0">
+      {/* 1. Solo el Content lleva la altura máxima */}
+      <DrawerContent className="max-h-[94dvh]">
+        {/* 2. El wrapper principal debe ser flex y ocupar el alto disponible */}
+        <div className="mx-auto w-full max-w-2xl flex flex-col h-[94dvh]">
+          <DrawerHeader className="border-b border-border/50 shrink-0 px-6 py-4">
             <div className="flex items-center justify-between">
               <div>
                 <DrawerTitle className="text-2xl capitalize">
@@ -53,20 +50,16 @@ function CategoryDetailComponent({
                 </DrawerTitle>
                 <DrawerDescription>{t("subtitle")}</DrawerDescription>
               </div>
-              <Badge variant="secondary" className="h-6">
+              <Badge variant="secondary" className="h-6 shrink-0">
                 {stats.totalStock} {t("stock")}
               </Badge>
             </div>
           </DrawerHeader>
 
-          {/* ÁREA DE SCROLL: 
-          - flex-1: toma todo el espacio central.
-          - overflow-y-auto: activa el scroll nativo.
-          - touch-pan-y: permite el gesto de scroll en pantallas táctiles.
-      */}
-          <div className="flex-1 overflow-y-auto touch-pan-y p-6">
-            {/* Grid de Stats Rápidas */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {/* 3. Área de scroll optimizada para móvil */}
+          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-8">
+            {/* Grid de Stats - 2 columnas fijas en móvil */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <StatItem
                 icon={<TrendingUp className="h-4 w-4 text-primary" />}
                 label={t("stats.revenue")}
@@ -89,10 +82,10 @@ function CategoryDetailComponent({
               />
             </div>
 
-            {/* Alertas de Stock Bajo */}
+            {/* Alertas de Stock */}
             {lowStockAlerts.length > 0 && (
-              <section className="mb-8">
-                <h4 className="text-sm font-semibold mb-3 flex items-center gap-2 text-destructive">
+              <section>
+                <h4 className="text-sm font-bold mb-3 flex items-center gap-2 text-destructive uppercase tracking-wider">
                   <AlertCircle className="h-4 w-4" />
                   {t("lowStockAlerts")}
                 </h4>
@@ -100,14 +93,17 @@ function CategoryDetailComponent({
                   {lowStockAlerts.map((p) => (
                     <div
                       key={p.id}
-                      className="flex justify-between items-center p-3 rounded-lg bg-destructive/10 border border-destructive/20"
+                      className="flex justify-between items-center p-3 rounded-xl bg-destructive/5 border border-destructive/10"
                     >
-                      <span className="text-sm font-medium">{p.title}</span>
-                      <Badge variant="destructive" className="text-[10px]">
+                      <span className="text-sm font-medium truncate pr-2">
+                        {p.title}
+                      </span>
+                      <Badge
+                        variant="destructive"
+                        className="text-[10px] shrink-0"
+                      >
                         {p.stock > 0
-                          ? t("lowStock", {
-                              stock: p.stock,
-                            })
+                          ? t("lowStock", { stock: p.stock })
                           : t("outOfStock")}
                       </Badge>
                     </div>
@@ -116,52 +112,51 @@ function CategoryDetailComponent({
               </section>
             )}
 
-            {/* Top Productos */}
-            <section className="pb-4">
-              <h4 className="text-sm font-semibold mb-3">{t("topProducts")}</h4>
-              <div className="rounded-xl border border-border overflow-hidden">
-                {topProducts.map((product, i) => (
+            {/* Top Productos - Lista limpia */}
+            <section className="pb-6">
+              <h4 className="text-sm font-bold mb-3 uppercase tracking-wider text-muted-foreground">
+                {t("topProducts")}
+              </h4>
+              <div className="rounded-2xl border border-border bg-card/30 divide-y divide-border overflow-hidden">
+                {topProducts.map((product) => (
                   <div
                     key={product.id}
-                    className={`flex items-center gap-4 p-3 ${
-                      i !== topProducts.length - 1
-                        ? "border-b border-border"
-                        : ""
-                    }`}
+                    className="flex items-center gap-4 p-4 hover:bg-muted/50 transition-colors"
                   >
-                    <Image
-                      src={product.thumbnail}
-                      alt={product.title}
-                      width={48}
-                      height={48}
-                      sizes="48px"
-                      className="h-12 w-12 rounded-lg object-cover bg-muted"
-                    />
+                    <div className="relative h-12 w-12 shrink-0">
+                      <Image
+                        src={product.thumbnail}
+                        alt={product.title}
+                        fill
+                        className="rounded-lg object-cover bg-muted"
+                      />
+                    </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">
+                      <p className="text-sm font-bold truncate">
                         {product.title}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {formatCurrency(product.price, locale)}
                       </p>
                     </div>
-                    <Badge variant="outline" className="text-[10px]">
-                      <Star className="h-4 w-4 text-yellow-500" />
-                      {product.rating}
-                    </Badge>
+                    <div className="flex items-center gap-1 bg-yellow-500/10 px-2 py-1 rounded-full shrink-0">
+                      <Star className="h-3 w-3 text-yellow-500 fill-yellow-500" />
+                      <span className="text-[10px] font-bold text-yellow-600">
+                        {product.rating}
+                      </span>
+                    </div>
                   </div>
                 ))}
               </div>
             </section>
           </div>
 
-          {/* Footer con shrink-0: se mantiene siempre pegado abajo */}
-          <DrawerFooter className="border-t border-border/50 shrink-0">
+          <DrawerFooter className="border-t border-border/50 shrink-0 p-6">
             <DrawerClose asChild>
               <Button
                 variant="outline"
                 onClick={onClose}
-                className={buttonStyles}
+                className={`w-full h-12 ${buttonStyles}`}
               >
                 {t("close")}
               </Button>
@@ -185,14 +180,14 @@ function StatItem({
   value: string | number
 }) {
   return (
-    <div className="p-3 rounded-xl border border-border bg-card/50">
+    <div className="p-3 rounded-2xl border border-border bg-card/40 backdrop-blur-sm">
       <div className="flex items-center gap-2 mb-1">
         {icon}
-        <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold">
+        <span className="text-[9px] uppercase tracking-widest text-muted-foreground font-black">
           {label}
         </span>
       </div>
-      <p className="text-lg font-semibold">{value}</p>
+      <p className="text-base font-bold tracking-tight">{value}</p>
     </div>
   )
 }
