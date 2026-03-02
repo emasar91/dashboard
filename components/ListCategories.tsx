@@ -5,7 +5,7 @@ import { FilterButton } from "./FilterButton"
 import { CategoryStat } from "@/types/dashboard"
 import GridCategories from "./GridCategories"
 import { useTranslations } from "next-intl"
-import { CategoryDetail } from "./CategoryDetail"
+import { CategoryDetailComponent } from "./CategoryDetail"
 import { type CategoryDetail as CategoryDetailType } from "@/types/dashboard"
 
 type ListCategoriesProps = {
@@ -165,7 +165,7 @@ const ListCategories = ({
           ))}
         </div>
       )}
-      <CategoryDetail
+      <CategoryDetailComponent
         categoryData={selectedCategory}
         isOpen={!!selectedCategory}
         onClose={() => setSelectedCategory(null)}

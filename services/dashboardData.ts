@@ -520,7 +520,7 @@ const getCategoryChartData = (carts: Cart[]) => {
     }))
 }
 
-export const getCategoryPieData = (carts: Cart[]) => {
+const getCategoryPieData = (carts: Cart[]) => {
   const categoryMap: Record<
     string,
     { name: string; revenue: number; orders: number }

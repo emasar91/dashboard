@@ -1,6 +1,7 @@
 "use client"
 
 import { useThemeColors } from "@/hooks/useThemeColor"
+
 import {
   Cell,
   Label,
@@ -9,6 +10,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts"
+
 import { useLocale } from "next-intl"
 import { formatCurrency } from "@/lib/formatCurrency"
 import { truncateText } from "@/lib/truncateText"
@@ -48,7 +50,7 @@ function CustomTooltip({
   )
 }
 
-export interface ChartDataEntry {
+interface ChartDataEntry {
   name: string
   value: number
 }

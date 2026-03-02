@@ -81,7 +81,7 @@ export function AreaChartComponent({
   intl,
 }: DynamicChartProps) {
   const colors = useThemeColors()
-  const chartData = useMemo(() => data, [data])
+  const chartData = data
   const t = useTranslations(intl)
 
   return (

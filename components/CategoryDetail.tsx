@@ -25,7 +25,7 @@ interface CategoryDrawerProps {
   categoryData: CategoryDetail | null
 }
 
-export function CategoryDetail({
+export function CategoryDetailComponent({
   isOpen,
   onClose,
   categoryData,
@@ -158,7 +158,7 @@ export function CategoryDetail({
   )
 }
 
-export default CategoryDetail
+export default CategoryDetailComponent
 
 function StatItem({
   icon,
