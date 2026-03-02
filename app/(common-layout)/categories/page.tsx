@@ -76,7 +76,7 @@ async function CategoriesPage() {
         categories={stats.categoryStats}
         categoryDetails={categoryDetails}
       />
-      <div className="mt-8">
+      <div className="mt-8 h-[300px]">
         <NoSSR>
           <LazyChartOverTime
             data={categoriesAreaChart}
