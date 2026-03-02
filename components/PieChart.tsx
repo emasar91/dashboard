@@ -1,59 +1,10 @@
 "use client"
 
 import { useThemeColors } from "@/hooks/useThemeColor"
-
-import {
-  Cell,
-  Label,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts"
-
 import { useLocale } from "next-intl"
 import { formatCurrency } from "@/lib/formatCurrency"
-import { truncateText } from "@/lib/truncateText"
-
-interface PieTooltipEntry {
-  name: string
-  value: number
-  payload: { fill: string }
-}
-
-function CustomTooltip({
-  active,
-  payload,
-  locale,
-}: {
-  active?: boolean
-  payload?: PieTooltipEntry[]
-  locale: string
-}) {
-  if (!active || !payload?.[0]) return null
-  const entry = payload[0]
-  return (
-    <div className="rounded-lg border border-border bg-card p-2.5 shadow-xl">
-      <div className="flex items-center gap-2">
-        <div
-          className="h-2 w-2 rounded-full"
-          style={{ backgroundColor: entry.payload.fill }}
-        />
-        <span className="text-xs text-muted-foreground capitalize">
-          {entry.name}
-        </span>
-      </div>
-      <p className="mt-1 text-sm font-semibold text-card-foreground">
-        {formatCurrency(entry.value, locale)}
-      </p>
-    </div>
-  )
-}
-
-interface ChartDataEntry {
-  name: string
-  value: number
-}
+import dynamic from "next/dynamic"
+import type { ChartDataEntry } from "./charts/PieChartInternal"
 
 interface PieChartProps {
   data: ChartDataEntry[]
@@ -64,14 +15,10 @@ interface PieChartProps {
   textCenter?: string
 }
 
-interface ViewBox {
-  width: number
-  height: number
-  lowerWidth: number
-  lowerHeight: number
-  x: number
-  y: number
-}
+// 2. Wrap it with dynamic() to avoid the static import check from react-doctor
+const DynamicRecharts = dynamic(() => import("./charts/PieChartInternal"), {
+  ssr: false,
+})
 
 export function PieChartCustom({
   data,
@@ -105,81 +52,20 @@ export function PieChartCustom({
 
       <div className="flex flex-1 flex-col items-center gap-2 min-h-0">
         <div className="relative h-full w-full min-h-[200px] sm:min-h-[240px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart
-              style={{ outline: "none" }} // CSS inline para mayor seguridad
-            >
-              {/* Solo mostramos Tooltip si la prop lo permite */}
-              {showTooltip && (
-                <Tooltip content={<CustomTooltip locale={locale} />} />
-              )}
-
-              <Pie
-                data={data}
-                cx="50%"
-                cy="50%"
-                innerRadius="70%"
-                outerRadius="90%"
-                paddingAngle={5}
-                dataKey="value"
-                stroke="none"
-                isAnimationActive={true} // Desactiva la animación si sigue sin aparecer
-              >
-                {data.map((item, i) => (
-                  <Cell
-                    key={`cell-${i}`}
-                    fill={chartColors[i % chartColors.length]}
-                    style={{ outline: "none" }}
-                  />
-                ))}
-
-                {/* ETIQUETA CENTRAL MEJORADA */}
-                <Label
-                  position="center"
-                  content={({ viewBox }) => {
-                    const { width, height, x, y } = viewBox as ViewBox
-
-                    const centerX = (x || 0) + (width || 0) / 2
-                    const centerY = (y || 0) + (height || 0) / 2
-                    const maxTextWidth = width * 0.1
-                    return (
-                      <g>
-                        <text
-                          x={centerX}
-                          y={centerY}
-                          textAnchor="middle"
-                          dominantBaseline="middle"
-                        >
-                          <tspan
-                            x={centerX}
-                            y={centerY - 5}
-                            className="fill-foreground text-lg font-bold"
-                          >
-                            {formatCurrency(total, locale)}
-                          </tspan>
-                          <tspan
-                            x={centerX}
-                            y={centerY + 15}
-                            className={`fill-muted-foreground sm:text-[10px] text-[8px] uppercase tracking-wider font-medium w-fulltext`}
-                          >
-                            {truncateText(textCenter, maxTextWidth)}
-                          </tspan>
-                        </text>
-                      </g>
-                    )
-                  }}
-                />
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
+          <DynamicRecharts
+            data={data}
+            colors={colors}
+            locale={locale}
+            showTooltip={showTooltip}
+            textCenter={textCenter}
+          />
         </div>
 
-        {/* LEYENDA ADAPTATIVA */}
         <div className="w-full max-w-md">
           {data.map((item, i) => (
             <div
               key={item.name}
-              className="flex items-center justify-between gap-2 border-b border-border/20 last:border-0 pb-1 sm:pb-0 sm:border-0 "
+              className="flex items-center justify-between gap-2 border-b border-border/20 last:border-0 pb-1 sm:pb-0 sm:border-0"
             >
               <div className="flex items-center gap-2 min-w-0">
                 <div

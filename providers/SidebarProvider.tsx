@@ -18,12 +18,12 @@ const SidebarContext = createContext<SidebarContextType | undefined>(undefined)
 
 export const SidebarProvider = ({
   children,
-  initialState,
+  defaultOpen = true,
 }: {
   children: ReactNode
-  initialState: boolean
+  defaultOpen?: boolean
 }) => {
-  const [openSidebar, setOpenSidebar] = useState(initialState)
+  const [openSidebar, setOpenSidebar] = useState(() => defaultOpen)
 
   // Sincronizamos el estado con la cookie cada vez que cambie
   useEffect(() => {

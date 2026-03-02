@@ -32,6 +32,7 @@ function GridCategories({
         <Image
           src={thumbnail}
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-cover opacity-40 grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500"
           alt={category}
         />

@@ -109,7 +109,7 @@ export function OrdersTable({ data }: OrdersTableProps) {
         onPageChange={() => {}}
         onRowClick={() => {}}
         pagination={false}
-        initialPageSize={12}
+        defaultPageSize={12}
       />
     </div>
   )

@@ -5,8 +5,8 @@ import { FilterButton } from "./FilterButton"
 import { CategoryStat } from "@/types/dashboard"
 import GridCategories from "./GridCategories"
 import { useTranslations } from "next-intl"
-import { CategoryDetailComponent } from "./CategoryDetail"
 import { type CategoryDetail as CategoryDetailType } from "@/types/dashboard"
+import CategoryDetailComponent from "./CategoryDetail"
 
 type ListCategoriesProps = {
   categories: CategoryStat[]

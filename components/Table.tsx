@@ -34,14 +34,14 @@ interface TableCustomProps<T extends { id: string | number }> {
 export function TableCustom<T extends { id: string | number }>({
   data,
   columns,
-  initialPageSize = 10,
+  defaultPageSize = 10,
   emptyMessage = "No data available",
   currentPage = 1,
   onPageChange = () => {},
   pagination = true,
   onRowClick,
-}: TableCustomProps<T>) {
-  const [pageSize, setPageSize] = useState(initialPageSize)
+}: TableCustomProps<T> & { defaultPageSize?: number }) {
+  const [pageSize, setPageSize] = useState(() => defaultPageSize)
 
   const totalItems = data.length
   const startIndex = (currentPage - 1) * pageSize

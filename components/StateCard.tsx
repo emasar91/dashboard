@@ -30,25 +30,6 @@ export async function StatCard({
   const locale = await getLocale()
   const t = await getTranslations(intl)
 
-  // Función auxiliar para renderizar el valor según el tipo
-  const renderValue = () => {
-    if (type === "string") {
-      return (
-        <span className="capitalize text-lg font-bold tracking-tight text-card-foreground lg:text-xl">
-          {String(value).replaceAll("-", " ")}
-        </span>
-      )
-    }
-
-    if (typeof value === "number") {
-      if (type === "currency") return formatCurrency(value, locale)
-      if (type === "percentage") return `${value.toFixed(2)}%`
-      return value
-    }
-
-    return value // Fallback
-  }
-
   return (
     <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 lg:p-3 transition-all duration-200 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 flex flex-col justify-between">
       <div className="flex items-start justify-between">
@@ -56,9 +37,9 @@ export async function StatCard({
           <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
             {t(title)}
           </p>
-          <p className="text-2xl font-bold tracking-tight text-card-foreground lg:text-3xl">
-            {renderValue()}
-          </p>
+          <div className="text-2xl font-bold tracking-tight text-card-foreground lg:text-3xl">
+            <StatValue value={value} type={type} locale={locale} />
+          </div>
         </div>
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary lg:h-10 lg:w-10">
           <Icon className="h-4 w-4 lg:h-5 lg:w-5" />
@@ -85,4 +66,30 @@ export async function StatCard({
       </div>
     </div>
   )
+}
+
+function StatValue({
+  value,
+  type,
+  locale,
+}: {
+  value: number | string
+  type: "currency" | "number" | "percentage" | "string"
+  locale: string
+}) {
+  if (type === "string") {
+    return (
+      <span className="capitalize text-lg font-bold tracking-tight text-card-foreground lg:text-xl">
+        {String(value).replaceAll("-", " ")}
+      </span>
+    )
+  }
+
+  if (typeof value === "number") {
+    if (type === "currency") return formatCurrency(value, locale)
+    if (type === "percentage") return `${value.toFixed(2)}%`
+    return value
+  }
+
+  return <>{value}</>
 }

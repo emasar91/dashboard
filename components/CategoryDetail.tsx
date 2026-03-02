@@ -25,7 +25,7 @@ interface CategoryDrawerProps {
   categoryData: CategoryDetail | null
 }
 
-export function CategoryDetailComponent({
+function CategoryDetailComponent({
   isOpen,
   onClose,
   categoryData,
@@ -121,6 +121,7 @@ export function CategoryDetailComponent({
                       alt={product.title}
                       width={48}
                       height={48}
+                      sizes="48px"
                       className="h-12 w-12 rounded-lg object-cover bg-muted"
                     />
                     <div className="flex-1 min-w-0">

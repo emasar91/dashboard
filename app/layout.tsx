@@ -42,7 +42,7 @@ export default async function RootLayout({
           <IntlProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               <TooltipProvider>
-                <SidebarProvider initialState={initialState}>
+                <SidebarProvider defaultOpen={initialState}>
                   {children}
                 </SidebarProvider>
               </TooltipProvider>
