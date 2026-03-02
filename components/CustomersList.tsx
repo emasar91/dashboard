@@ -24,14 +24,21 @@ export default function CustomersList({ users }: { users: User[] }) {
 
   const filterGroups = [
     {
-      label: t("filter.gender"),
+      label: t("filter.gender.title"),
       key: "gender",
-      options: ["male", "female"],
+      options: [
+        { label: t("filter.gender.male"), value: "male" },
+        { label: t("filter.gender.female"), value: "female" },
+      ],
     },
     {
-      label: t("filter.ageRange"),
+      label: t("filter.ageRange.title"),
       key: "age",
-      options: ["20-29", "30-39", "40-49"],
+      options: [
+        { label: t("filter.ageRange.young"), value: "20-29" },
+        { label: t("filter.ageRange.middle"), value: "30-39" },
+        { label: t("filter.ageRange.old"), value: "40-49" },
+      ],
     },
   ]
 

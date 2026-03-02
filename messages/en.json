@@ -2,7 +2,7 @@
   "sidebar": {
     "openSidebar": "Open Sidebar",
     "user": "Admin User",
-    "nameApp": "Dashboard",
+    "nameApp": "Dummy Dashboard",
     "dashboard": "Dashboard",
     "products": "Products",
     "orders": "Orders",
@@ -195,8 +195,17 @@
     },
     "filter": {
       "title": "Filter",
-      "gender": "By gender",
-      "ageRange": "By age range",
+      "gender": {
+        "title": "By gender",
+        "male": "Male",
+        "female": "Female"
+      },
+      "ageRange": {
+        "title": "By age range",
+        "young": "between 20 and 29 years",
+        "middle": "between 30 and 39 years",
+        "old": "over 40 years"
+      },
       "all": "Clear filters"
     },
     "table": {

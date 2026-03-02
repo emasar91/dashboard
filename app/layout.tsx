@@ -20,7 +20,31 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",
-  description: "Admin Dashboard",
+  description: "Visualiza las estadisticas de tu tienda en tiempo real.",
+  // Esto es lo que ven WhatsApp, Facebook, etc.
+  openGraph: {
+    title: "Admin Dashboard",
+    description: "Visualiza las estadisticas de tu tienda en tiempo real.",
+    url: "https://emasar-dummy-dashboard.vercel.app/", // Cambia esto por tu URL real
+    siteName: "Admin Dummy Dashboard",
+    images: [
+      {
+        url: "/assets/dashboard.png", // Ruta a la foto en tu carpeta /public
+        width: 1200,
+        height: 630,
+        alt: "Admin Dashboard Preview",
+      },
+    ],
+    locale: "es_AR",
+    type: "website",
+  },
+  // Esto es específicamente para Twitter/X
+  twitter: {
+    card: "summary_large_image",
+    title: "Admin Dummy Dashboard",
+    description: "Visualiza las estadisticas de tu tienda en tiempo real.",
+    images: ["/assets/dashboard.png"],
+  },
 }
 
 export default async function RootLayout({
