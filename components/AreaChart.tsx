@@ -36,7 +36,7 @@ export function AreaChartComponent({
   const t = useTranslations(intl)
 
   return (
-    <div className="flex h-full flex-col rounded-xl border border-border bg-card p-4 lg:p-5">
+    <div className="flex h-full flex-col rounded-xl border border-border bg-card p-4 lg:p-5 [&_*:focus]:outline-none [&_*:focus]:box-shadow-none">
       <div className="mb-4 flex items-center justify-between">
         <div>
           <h3 className="text-sm font-semibold text-card-foreground">

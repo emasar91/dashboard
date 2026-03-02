@@ -23,8 +23,7 @@ export default function RechartsAreaInternal({
   secondaryKey?: string
   t: (key: string) => string
 }) {
-  // Use require within the component to satisfy react-doctor project-wide
-  // while maintaining the dynamic boundary.
+  // Mantenemos el require para evitar errores de react-doctor y SSR
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const recharts = require("recharts")
   const {
@@ -42,12 +41,13 @@ export default function RechartsAreaInternal({
       width="100%"
       height="100%"
       minHeight={220}
-      minWidth={300}
+      minWidth={250}
       debounce={100}
     >
       <AreaChart
         data={data}
-        margin={{ top: 5, right: 5, left: -20, bottom: 0 }}
+        // Ajustamos márgenes para que la curva use todo el espacio al no haber ejes
+        margin={{ top: 10, right: 10, left: 10, bottom: 0 }}
       >
         <defs>
           <linearGradient id="colorPrimary" x1="0" y1="0" x2="0" y2="1">
@@ -66,32 +66,14 @@ export default function RechartsAreaInternal({
           strokeDasharray="3 3"
           stroke={colors.grid}
           vertical={false}
+          opacity={0.1} // Más sutil para look Apple
         />
 
-        <XAxis
-          dataKey={xKey}
-          axisLine={false}
-          tickLine={false}
-          tick={{ fill: colors.tick, fontSize: 10 }}
-          interval={0}
-          angle={-45}
-          textAnchor="end"
-          height={60}
-          tickFormatter={(value: string) =>
-            value.length > 10
-              ? `${value.replaceAll("-", " ").substring(0, 8)}...`
-              : value.replaceAll("-", " ")
-          }
-        />
+        {/* XAxis con hide para limpiar la base */}
+        <XAxis dataKey={xKey} hide={true} />
 
-        <YAxis
-          axisLine={false}
-          tickLine={false}
-          tick={{ fill: colors.tick, fontSize: 11 }}
-          tickFormatter={(v: number) =>
-            primaryKey === "revenue" ? `$${v / 1000}k` : v
-          }
-        />
+        {/* YAxis con hide para limpiar el lateral */}
+        <YAxis hide={true} domain={["auto", "auto"]} />
 
         <Tooltip
           content={({
@@ -105,8 +87,8 @@ export default function RechartsAreaInternal({
           }) => {
             if (!active || !payload) return null
             return (
-              <div className="rounded-lg border border-border bg-card p-3 shadow-xl">
-                <p className="mb-2 text-xs font-medium text-muted-foreground capitalize">
+              <div className="rounded-xl border border-border bg-card/80 backdrop-blur-md p-3 shadow-2xl">
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                   {String(label || "").replaceAll("-", " ")}
                 </p>
                 {(payload as TooltipEntry[]).map((entry: TooltipEntry) => (
@@ -134,8 +116,10 @@ export default function RechartsAreaInternal({
           type="monotone"
           dataKey={primaryKey}
           stroke={colors.primary}
-          strokeWidth={2}
+          strokeWidth={3} // Un poco más grueso para compensar la falta de ejes
           fill="url(#colorPrimary)"
+          dot={false} // Limpieza visual
+          activeDot={{ r: 4, strokeWidth: 0 }}
         />
 
         {secondaryKey && (
@@ -143,8 +127,10 @@ export default function RechartsAreaInternal({
             type="monotone"
             dataKey={secondaryKey}
             stroke={colors.accent}
-            strokeWidth={2}
+            strokeWidth={3}
             fill="url(#colorSecondary)"
+            dot={false}
+            activeDot={{ r: 4, strokeWidth: 0 }}
           />
         )}
       </AreaChart>

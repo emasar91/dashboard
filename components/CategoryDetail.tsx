@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/drawer"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { AlertCircle, Package, Star, TrendingUp, Wallet } from "lucide-react"
 import { type CategoryDetail } from "@/types/dashboard"
 import Image from "next/image"
@@ -39,9 +38,14 @@ function CategoryDetailComponent({
 
   return (
     <Drawer open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DrawerContent className="max-h-[90vh]">
-        <div className="mx-auto w-full max-w-2xl overflow-hidden flex flex-col h-full">
-          <DrawerHeader className="border-b border-border/50">
+      {/* Cambiado a 96vh para evitar que el teclado o barras de navegación lo corten */}
+      <DrawerContent className="max-h-[96vh]">
+        {/* ELIMINADO: overflow-hidden (previene el scroll)
+        MODIFICADO: h-full por h-[96vh] para que flex-1 tenga un punto de referencia 
+    */}
+        <div className="mx-auto w-full max-w-2xl flex flex-col max-h-[96vh]">
+          {/* Header con shrink-0: impide que el encabezado se aplaste */}
+          <DrawerHeader className="border-b border-border/50 shrink-0">
             <div className="flex items-center justify-between">
               <div>
                 <DrawerTitle className="text-2xl capitalize">
@@ -55,7 +59,12 @@ function CategoryDetailComponent({
             </div>
           </DrawerHeader>
 
-          <ScrollArea className="flex-1 p-6">
+          {/* ÁREA DE SCROLL: 
+          - flex-1: toma todo el espacio central.
+          - overflow-y-auto: activa el scroll nativo.
+          - touch-pan-y: permite el gesto de scroll en pantallas táctiles.
+      */}
+          <div className="flex-1 overflow-y-auto touch-pan-y p-6">
             {/* Grid de Stats Rápidas */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
               <StatItem
@@ -108,13 +117,17 @@ function CategoryDetailComponent({
             )}
 
             {/* Top Productos */}
-            <section>
+            <section className="pb-4">
               <h4 className="text-sm font-semibold mb-3">{t("topProducts")}</h4>
               <div className="rounded-xl border border-border overflow-hidden">
                 {topProducts.map((product, i) => (
                   <div
                     key={product.id}
-                    className={`flex items-center gap-4 p-3 ${i !== topProducts.length - 1 ? "border-b border-border" : ""}`}
+                    className={`flex items-center gap-4 p-3 ${
+                      i !== topProducts.length - 1
+                        ? "border-b border-border"
+                        : ""
+                    }`}
                   >
                     <Image
                       src={product.thumbnail}
@@ -140,9 +153,10 @@ function CategoryDetailComponent({
                 ))}
               </div>
             </section>
-          </ScrollArea>
+          </div>
 
-          <DrawerFooter className="border-t border-border/50">
+          {/* Footer con shrink-0: se mantiene siempre pegado abajo */}
+          <DrawerFooter className="border-t border-border/50 shrink-0">
             <DrawerClose asChild>
               <Button
                 variant="outline"
