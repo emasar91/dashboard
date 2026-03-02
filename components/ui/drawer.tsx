@@ -123,7 +123,6 @@ function DrawerDescription({
 
 export {
   Drawer,
-  DrawerOverlay,
   DrawerTrigger,
   DrawerClose,
   DrawerContent,
