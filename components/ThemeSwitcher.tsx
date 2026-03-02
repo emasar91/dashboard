@@ -8,7 +8,7 @@ import { Button } from "./ui/button"
 const emptySubscribe = () => () => {}
 
 export default function ThemeSwitcher() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme, resolvedTheme } = useTheme()
   const mounted = useSyncExternalStore(
     emptySubscribe,
     () => true,
@@ -17,7 +17,7 @@ export default function ThemeSwitcher() {
 
   return (
     <Button
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       className="flex items-center justify-center p-2 rounded-lg transition-colors bg-gray-50 dark:bg-[#262626] hover:bg-gray-200 dark:hover:bg-slate-700 cursor-pointer border"
       aria-label="Cambiar tema"
     >
