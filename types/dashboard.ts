@@ -72,13 +72,7 @@ export interface Address {
   state: string
   stateCode: string
   postalCode: string
-  coordinates: Coordinates
   country: string
-}
-
-export interface Coordinates {
-  lat: number
-  lng: number
 }
 
 export interface Bank {
