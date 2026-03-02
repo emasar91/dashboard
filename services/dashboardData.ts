@@ -148,7 +148,7 @@ export async function getDashboardData(
   }
 }
 
-export const getRevenueByMonthChartData = (
+const getRevenueByMonthChartData = (
   carts: Cart[],
   locale: string | undefined,
 ) => {
@@ -188,7 +188,7 @@ export const getRevenueByMonthChartData = (
   return groupedData
 }
 
-export const getTopSellingProducts = (carts: Cart[]) => {
+const getTopSellingProducts = (carts: Cart[]) => {
   const productMap: Record<
     number,
     { name: string; sales: number; totalRevenue: number }
@@ -225,23 +225,7 @@ export const getTopSellingProducts = (carts: Cart[]) => {
     }))
 }
 
-export const getCategoryData = (carts: Cart[]) => {
-  const categoryMap: Record<string, number> = {}
-
-  carts.forEach((cart) => {
-    cart.products.forEach((product: CartProduct) => {
-      const cat = product.category // Ahora sí existe
-      categoryMap[cat] = (categoryMap[cat] || 0) + product.total
-    })
-  })
-
-  return Object.entries(categoryMap)
-    .map(([name, value]) => ({ name, value }))
-    .sort((a, b) => b.value - a.value)
-    .slice(0, 5)
-}
-
-export const getRecentActivity = (
+const getRecentActivity = (
   carts: Cart[],
   users: User[],
   t?: (key: string, values?: Record<string, string | number>) => string,
@@ -298,7 +282,7 @@ export const getRecentActivity = (
   return activities.sort((a, b) => a.time.localeCompare(b.time)) // Un sort simple
 }
 
-export const getDashboardKpis = (
+const getDashboardKpis = (
   usersRes: AxiosResponse<UsersResponse>,
   cartsRes: AxiosResponse<CartsResponse>,
   totalSales: number,
@@ -323,7 +307,7 @@ export const getDashboardKpis = (
   }
 }
 
-export const getCategoryKpis = (allProducts: Product[]) => {
+const getCategoryKpis = (allProducts: Product[]) => {
   const categoryStats: Record<string, { count: number; stock: number }> = {}
   let totalDiscountSum = 0
 
@@ -377,10 +361,7 @@ export const getCategoryKpis = (allProducts: Product[]) => {
   }
 }
 
-export const getProductKpis = (
-  allProducts: Product[],
-  allCategories: string[],
-) => {
+const getProductKpis = (allProducts: Product[], allCategories: string[]) => {
   return {
     totalProducts: {
       value: allProducts.length,
@@ -400,7 +381,7 @@ export const getProductKpis = (
   }
 }
 
-export const getOrdersKpis = (carts: Cart[], usersWithOrders: number) => {
+const getOrdersKpis = (carts: Cart[], usersWithOrders: number) => {
   return {
     totalOrders: {
       value: carts.length,
@@ -427,7 +408,7 @@ export const getOrdersKpis = (carts: Cart[], usersWithOrders: number) => {
   }
 }
 
-export const getCustomerKpis = (
+const getCustomerKpis = (
   carts: Cart[],
   usersRes: AxiosResponse<UsersResponse>,
 ) => {
@@ -447,7 +428,7 @@ export const getCustomerKpis = (
   }
 }
 
-export const getDiscountKpis = (allProducts: Product[]) => {
+const getDiscountKpis = (allProducts: Product[]) => {
   const stats = allProducts.reduce(
     (acc, p) => {
       // 1. Cantidad de productos que tienen algún descuento
@@ -504,7 +485,7 @@ export const getDiscountKpis = (allProducts: Product[]) => {
   }
 }
 
-export const getCategoryChartData = (carts: Cart[]) => {
+const getCategoryChartData = (carts: Cart[]) => {
   const categoryMap: Record<
     string,
     { name: string; revenue: number; orders: number }
@@ -574,7 +555,7 @@ export const getCategoryPieData = (carts: Cart[]) => {
     }))
 }
 
-export const calculateTrend = (current: number, seed: string): TrendData => {
+const calculateTrend = (current: number, seed: string): TrendData => {
   // 1. Creamos una variación basada en la longitud del nombre o un código
   // Esto genera un "ruido" entre 0.05 y 0.20 (5% y 20%)
   const noise = (seed.length % 10) / 50 + 0.05
@@ -595,7 +576,7 @@ export const calculateTrend = (current: number, seed: string): TrendData => {
   }
 }
 
-export const getCategoryDetails = (
+const getCategoryDetails = (
   allProducts: Product[],
   allCategories: string[],
   cartsWithData: Cart[],
