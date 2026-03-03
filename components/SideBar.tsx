@@ -29,32 +29,34 @@ export function Sidebar({ currentSelected }: { currentSelected: string }) {
     {
       title: "dashboard",
       href: "/dashboard",
-      icon: <LayoutDashboard className="size-7 shrink-0" />,
+      icon: (
+        <LayoutDashboard className=" size-5 md:size-7 lg:size-7 shrink-0" />
+      ),
     },
     {
       title: "products",
       href: "/products",
-      icon: <Package className="size-7 shrink-0" />,
+      icon: <Package className="size-5 md:size-7 lg:size-7 shrink-0" />,
     },
     {
       title: "orders",
       href: "/orders",
-      icon: <Handbag className="size-7 shrink-0" />,
+      icon: <Handbag className="size-5 md:size-7 lg:size-7 shrink-0" />,
     },
     {
       title: "customers",
       href: "/customers",
-      icon: <Users className="size-7 shrink-0" />,
+      icon: <Users className="size-5 md:size-7 lg:size-7 shrink-0" />,
     },
     {
       title: "discounts",
       href: "/discounts",
-      icon: <BadgePercent className="size-7 shrink-0" />,
+      icon: <BadgePercent className="size-5 md:size-7 lg:size-7 shrink-0" />,
     },
     {
       title: "categories",
       href: "/categories",
-      icon: <ChartBarStacked className="size-7 shrink-0" />,
+      icon: <ChartBarStacked className="size-5 md:size-7 lg:size-7 shrink-0" />,
     },
   ]
 
@@ -89,7 +91,7 @@ export function Sidebar({ currentSelected }: { currentSelected: string }) {
           "sm:relative sm:z-0",
           openSidebar
             ? "w-[350px] translate-x-0" // Abierto: ancho completo
-            : "w-[64px]! translate-x-0", // Cerrado: solo espacio para iconos
+            : "w-[55px]! md:w-[64px]! translate-x-0", // Cerrado: solo espacio para iconos
         )}
       >
         {/* Contenido interno con ancho FIJO para que NO se deforme al cerrar */}
@@ -120,9 +122,9 @@ export function Sidebar({ currentSelected }: { currentSelected: string }) {
                     onClick={() => setOpenSidebar(!openSidebar)}
                   >
                     {openSidebar ? (
-                      <PanelLeftClose className="size-6" />
+                      <PanelLeftClose className="size-5 md:size-7 lg:size-7" />
                     ) : (
-                      <PanelRightClose className="size-6" />
+                      <PanelRightClose className="size-5 md:size-7 lg:size-7" />
                     )}
                   </Button>
                 </TooltipTrigger>
@@ -219,7 +221,7 @@ export function Sidebar({ currentSelected }: { currentSelected: string }) {
 
           <div className="flex h-[72px] shrink-0 items-center gap-2 p-2">
             <div className="flex items-center gap-2 border rounded-full p-2 border-primary">
-              <User />
+              <User className="size-5 md:size-7 lg:size-7" />
             </div>
             <span
               className={cn(
