@@ -95,31 +95,37 @@ export function Sidebar({ currentSelected }: { currentSelected: string }) {
         )}
       >
         {/* Contenido interno con ancho FIJO para que NO se deforme al cerrar */}
-        <div className="w-full flex flex-col h-full shrink-0 bg-t bg-[#fafafa] dark:bg-[#1e1e1e] ">
-          <div className="flex h-[72px] shrink-0 items-center justify-between p-4">
+        <div className="w-full flex flex-col h-full shrink-0 bg-t bg-[#fafafa] dark:bg-[#1e1e1e]">
+          <div
+            className="flex h-[72px] shrink-0 items-center justify-between p-4"
+            onClick={() => setOpenSidebar(!openSidebar)}
+          >
             <div
               className={cn(
                 "flex items-center gap-2 w-full transition-all duration-700 ease-in-out ",
-                !openSidebar ? "justify-end" : "justify-between",
+                !openSidebar ? "justify-center" : "justify-between",
               )}
             >
-              <span
-                className={cn(
-                  "transition-opacity duration-700 ease-in-out overflow-hidden whitespace-nowrap",
-                  openSidebar
-                    ? "opacity-100 w-full"
-                    : "opacity-0 w-0 pointer-events-none",
-                )}
-              >
-                {t("nameApp")}
-              </span>
+              {openSidebar && (
+                <span
+                  className={cn(
+                    "transition-opacity duration-700 ease-in-out overflow-hidden whitespace-nowrap",
+                    openSidebar
+                      ? "opacity-100 w-full"
+                      : "opacity-0 w-0 pointer-events-none",
+                  )}
+                >
+                  {t("nameApp")}
+                </span>
+              )}
 
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="p-0! cursor-pointer dark:hover:bg-transparent hover:bg-transparent hover:text-primary"
-                    onClick={() => setOpenSidebar(!openSidebar)}
+                    className={cn(
+                      "cursor-pointer dark:hover:bg-transparent hover:bg-transparent hover:text-primary",
+                    )}
                   >
                     {openSidebar ? (
                       <PanelLeftClose className="size-5 md:size-7 lg:size-7" />
