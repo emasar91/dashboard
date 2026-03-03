@@ -39,9 +39,9 @@ function CategoryDetailComponent({
   return (
     <Drawer open={isOpen} onOpenChange={(open) => !open && onClose()}>
       {/* 1. Solo el Content lleva la altura máxima */}
-      <DrawerContent className="max-h-[94dvh]">
+      <DrawerContent className="h-[96dvh] max-h-[96dvh]">
         {/* 2. El wrapper principal debe ser flex y ocupar el alto disponible */}
-        <div className="mx-auto w-full max-w-2xl flex flex-col h-[94dvh]">
+        <div className="mx-auto w-full max-w-2xl flex flex-col h-full overflow-hidden">
           <DrawerHeader className="border-b border-border/50 shrink-0 px-6 py-4">
             <div className="flex items-center justify-between">
               <div>
@@ -55,9 +55,8 @@ function CategoryDetailComponent({
               </Badge>
             </div>
           </DrawerHeader>
-
           {/* 3. Área de scroll optimizada para móvil */}
-          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-8">
+          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-8 touch-pan-y">
             {/* Grid de Stats - 2 columnas fijas en móvil */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <StatItem
@@ -150,8 +149,7 @@ function CategoryDetailComponent({
               </div>
             </section>
           </div>
-
-          <DrawerFooter className="border-t border-border/50 shrink-0 p-6">
+          <DrawerFooter className="border-t border-border/50 shrink-0 p-6 bg-background/80 backdrop-blur-md">
             <DrawerClose asChild>
               <Button
                 variant="outline"

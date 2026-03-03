@@ -20,11 +20,11 @@ import { LanguageSwitcher } from "./LanguageSwitcher"
 import ThemeSwitcher from "./ThemeSwitcher"
 import Link from "next/link"
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
-
+import { useIsMobile } from "@/hooks/useMobile"
 export function Sidebar({ currentSelected }: { currentSelected: string }) {
   const t = useTranslations("sidebar")
   const { openSidebar, setOpenSidebar } = useSidebar()
-
+  const isMobile = useIsMobile()
   const items = [
     {
       title: "dashboard",
@@ -57,6 +57,12 @@ export function Sidebar({ currentSelected }: { currentSelected: string }) {
       icon: <ChartBarStacked className="size-7 shrink-0" />,
     },
   ]
+
+  const handleNavigation = () => {
+    if (isMobile) {
+      setOpenSidebar(false)
+    }
+  }
 
   return (
     <>
@@ -142,6 +148,7 @@ export function Sidebar({ currentSelected }: { currentSelected: string }) {
                   <TooltipTrigger asChild>
                     <Link
                       href={item.href}
+                      onClick={handleNavigation}
                       className={cn(
                         // Clases base y de hover
                         "flex gap-4 dark:hover:bg-slate-700 hover:bg-gray-200 w-full rounded-lg p-2 transition-all duration-300 items-center hover:text-primary",
